@@ -1,8 +1,6 @@
-# Hashid::Rails
+# hashid-rails
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/hashid/rails`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+This gem allows you to easily use [Hashids](http://hashids.org/ruby/) in your Rails app. Instead of your models using sequential numbers like 1, 2, 3, they will instead have unique short hashes like 'yLA6m0oM', '5bAyD0LO', and 'wz3MZ49l'. The database will still use integers for performance, but the public visible urls will be obfuscated.
 
 ## Installation
 
@@ -22,7 +20,13 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Instead of using:
+
+    @person = People.find(params[:id])
+
+You would instead use:
+
+    @person = People.hashid_find(params[:id])
 
 ## Development
 

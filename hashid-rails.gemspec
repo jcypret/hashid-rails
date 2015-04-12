@@ -9,8 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Justin Cypret']
   spec.email         = ['jcypret@gmail.com']
 
-  spec.summary       = %q{TODO: Write a short summary, because Rubygems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
+  spec.summary       = %q{Use Hashids for models in your rails app.}
   spec.homepage      = 'https://github.com/jcypret/hashid-rails'
   spec.license       = 'MIT'
 
