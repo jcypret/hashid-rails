@@ -9,7 +9,14 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Justin Cypret']
   spec.email         = ['jcypret@gmail.com']
 
-  spec.summary       = %q{Use Hashids for models in your rails app.}
+  spec.summary       = %q{Use Hashids in your Rails app models.}
+  spec.description   = <<-EOM
+    Hashid-Rails allows you to easily use [Hashids](http://hashids.org/ruby/)
+    in your Rails app. Instead of your models using sequential numbers like 1,
+    2, 3, they will instead have unique short hashes like "yLA6m0oM",
+    "5bAyD0LO", and "wz3MZ49l". The database will still use integers under
+    the hood, so this gem can be added or removed at any time.
+  EOM
   spec.homepage      = 'https://github.com/jcypret/hashid-rails'
   spec.license       = 'MIT'
 
@@ -21,6 +28,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'bundler', '~> 1.9'
   spec.add_development_dependency 'rake', '~> 10.0'
 
-  spec.add_dependency 'activerecord', '>= 4.0.0'
-  spec.add_dependency 'hashids', '~> 1.0.2'
+  spec.add_runtime_dependency 'activerecord', '~> 4.0'
+  spec.add_runtime_dependency 'hashids', '~> 1.0'
 end
