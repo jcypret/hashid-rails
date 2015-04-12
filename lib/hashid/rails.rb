@@ -1,10 +1,22 @@
-require "hashid/rails/version"
+require 'hashid/rails/version'
+require 'active_record'
 
 module Hashid
   module Rails
-    extend ActiveSupport::Concern
+    def self.included(base)
+      base.extend ClassMethods
+    end
 
-    class_methods do
+    def encoded_id
+      self.class.encode_id(id)
+    end
+
+    def to_param
+      encoded_id
+    end
+    alias_method :hashid, :to_param
+
+    module ClassMethods
       def hashids
         Hashids.new(table_name, 6)
       end
@@ -21,15 +33,6 @@ module Hashid
         find(decode_id(hashid))
       end
     end
-
-    def encoded_id
-      self.class.encode_id(id)
-    end
-
-    def to_param
-      encoded_id
-    end
-    alias_method :hashid, :to_param
   end
 end
 
