@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = %q{Use Hashids in your Rails app models.}
   spec.description   = <<-EOM
-    Hashid-Rails allows you to easily use [Hashids](http://hashids.org/ruby/)
+    This gem allows you to easily use [Hashids](http://hashids.org/ruby/)
     in your Rails app. Instead of your models using sequential numbers like 1,
     2, 3, they will instead have unique short hashes like "yLA6m0oM",
     "5bAyD0LO", and "wz3MZ49l". The database will still use integers under

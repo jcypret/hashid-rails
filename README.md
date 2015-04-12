@@ -1,6 +1,6 @@
-# hashid-rails
+# Hashid Rails
 
-Hashid-Rails allows you to easily use [Hashids](http://hashids.org/ruby/) in your Rails app. Instead of your models using sequential numbers like 1, 2, 3, they will instead have unique short hashes like "yLA6m0oM", "5bAyD0LO", and "wz3MZ49l". The database will still use integers under the hood, so this gem can be added or removed at any time.
+This gem allows you to easily use [Hashids](http://hashids.org/ruby/) in your Rails app. Instead of your models using sequential numbers like 1, 2, 3, they will instead have unique short hashes like "yLA6m0oM", "5bAyD0LO", and "wz3MZ49l". The database will still use integers under the hood, so this gem can be added or removed at any time.
 
 ## Installation
 
@@ -20,9 +20,11 @@ Or install it yourself as:
 
 ## Usage
 
-Just use `Model#find` like normal:
+Just use `Model#find` passing in the hashid instead of the model id:
 
-    @person = People.find(params[:id])
+```ruby
+@person = People.find(params[:hashid])
+```
 
 ## Development
 
