@@ -20,13 +20,9 @@ Or install it yourself as:
 
 ## Usage
 
-Instead of using:
+Just use `Model#find` like normal:
 
     @person = People.find(params[:id])
-
-You would instead use:
-
-    @person = People.hashid_find(params[:id])
 
 ## Development
 

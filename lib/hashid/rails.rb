@@ -1,4 +1,5 @@
 require 'hashid/rails/version'
+require 'hashids'
 require 'active_record'
 
 module Hashid
@@ -29,8 +30,8 @@ module Hashid
         hashids.decode(id).first
       end
 
-      def hashid_find(hashid)
-        find(decode_id(hashid))
+      def find(hashid)
+        super(decode_id(hashid))
       end
     end
   end
