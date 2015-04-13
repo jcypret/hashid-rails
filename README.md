@@ -23,7 +23,7 @@ Or install it yourself as:
 Just use `Model#find` passing in the hashid instead of the model id:
 
 ```ruby
-@person = People.find(params[:hashid])
+@person = Person.find(params[:hashid])
 ```
 
 ## Development
