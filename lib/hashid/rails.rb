@@ -31,7 +31,11 @@ module Hashid
       end
 
       def find(hashid)
-        super(decode_id(hashid))
+        if hashid.is_a? String
+          super decode_id(hashid)
+        else
+          super hashid
+        end
       end
     end
   end
