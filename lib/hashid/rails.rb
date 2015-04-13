@@ -27,15 +27,11 @@ module Hashid
       end
 
       def decode_id(id)
-        hashids.decode(id).first
+        hashids.decode(id.to_s).first
       end
 
       def find(hashid)
-        if hashid.is_a? String
-          super decode_id(hashid)
-        else
-          super hashid
-        end
+        super decode_id(hashid) || hashid
       end
     end
   end
