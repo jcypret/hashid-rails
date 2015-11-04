@@ -4,9 +4,12 @@ require 'active_record'
 
 module Hashid
   module Rails
-    def hashid
+    def hashid(options = {})
       extend ClassMethods
       include InstanceMethods
+
+      cattr_accessor :hashid_options
+      self.hashid_options = ({length: 6}.merge(options))
     end
 
     module InstanceMethods
@@ -22,7 +25,13 @@ module Hashid
 
     module ClassMethods
       def hashids
-        Hashids.new(table_name, 6)
+        salt = if self.hashid_options[:secure]
+                 "#{table_name}:#{::Rails.application.secrets.secret_key_base}"
+               else
+                 table_name
+               end
+        hash_length = self.hashid_options[:length]
+        Hashids.new(salt, hash_length)
       end
 
       def encode_id(id)
