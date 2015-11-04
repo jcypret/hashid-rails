@@ -4,18 +4,21 @@ require 'active_record'
 
 module Hashid
   module Rails
-    def self.included(base)
-      base.extend ClassMethods
+    def hashid
+      extend ClassMethods
+      include InstanceMethods
     end
 
-    def encoded_id
-      self.class.encode_id(id)
-    end
+    module InstanceMethods
+      def encoded_id
+        self.class.encode_id(id)
+      end
 
-    def to_param
-      encoded_id
+      def to_param
+        encoded_id
+      end
+      alias_method :hashid, :to_param
     end
-    alias_method :hashid, :to_param
 
     module ClassMethods
       def hashids
@@ -37,4 +40,4 @@ module Hashid
   end
 end
 
-ActiveRecord::Base.send :include, Hashid::Rails
+ActiveRecord::Base.extend Hashid::Rails
