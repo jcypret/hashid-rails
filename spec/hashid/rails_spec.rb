@@ -12,7 +12,7 @@ describe Hashid::Rails do
       end
     end
 
-    it "returns collect length" do
+    it "returns correct length" do
       expect(User.hashids.min_hash_length).to eq(10)
       expect(User.encode_id(1).size).to eq(10)
     end
