@@ -4,6 +4,17 @@ require 'active_record'
 
 module Hashid
   module Rails
+
+    class << self
+      attr_accessor :configuration
+    end
+
+    def self.configure
+      self.configuration ||= Configuration.new
+      yield(configuration)
+    end
+
+
     def self.included(base)
       base.extend ClassMethods
     end
@@ -18,8 +29,10 @@ module Hashid
     alias_method :hashid, :to_param
 
     module ClassMethods
+
       def hashids
-        Hashids.new(table_name, 6)
+        secret = Hashid::Rails.configuration ? Hashid::Rails.configuration.secret : ''
+        Hashids.new("#{table_name}#{secret}", 6)
       end
 
       def encode_id(id)
@@ -34,7 +47,17 @@ module Hashid
         super decode_id(hashid) || hashid
       end
     end
+
+    class Configuration
+      attr_accessor :secret
+
+      def initialize
+        @secret = ''
+      end
+
+    end
   end
+
 end
 
 ActiveRecord::Base.send :include, Hashid::Rails
