@@ -26,6 +26,17 @@ Just use `Model#find` passing in the hashid instead of the model id:
 @person = Person.find(params[:hashid])
 ```
 
+## Configuration
+
+To customize the Hashids seed and ensure that another user of the gem cannot easily reverse engineer your ids, 
+create an initializer and:
+
+```ruby
+Hashid::Rails.configure do |config|
+  config.secret = 'my secret'
+end
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `bin/console` for an interactive prompt that will allow you to experiment.
