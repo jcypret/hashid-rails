@@ -44,6 +44,7 @@ module Hashid
       end
 
       def find(hashid)
+        return super hashid if caller.select{|s| s =~ /reload/ && s =~ /active_record\/persistence/}.any?
         super decode_id(hashid) || hashid
       end
     end
