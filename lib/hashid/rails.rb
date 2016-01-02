@@ -56,7 +56,7 @@ module Hashid
       private
 
       def model_reload?
-        caller.first(3).any?{|s| s =~ /active_record\/persistence.*reload/}
+        caller.any? {|s| s =~ /active_record\/persistence.*reload/}
       end
     end
 
