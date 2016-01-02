@@ -41,7 +41,7 @@ describe Hashid::Rails do
         expect(model.encoded_id.length).to eql 6
       end
 
-      it 'can be customized' do
+      it 'encodes to custom length' do
         Hashid::Rails.configure do |config|
           config.length = 13
         end

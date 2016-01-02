@@ -41,6 +41,7 @@ easily reverse engineer your ids, create an initializer and:
 ```ruby
 Hashid::Rails.configure do |config|
   config.secret = 'my secret'
+  config.length = 6
 end
 ```
 
