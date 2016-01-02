@@ -111,8 +111,5 @@ class Model < ActiveRecord::Base
 end
 
 class FakeConnection
-
-  def clear_query_cache
-
-  end
+  def clear_query_cache; end
 end
