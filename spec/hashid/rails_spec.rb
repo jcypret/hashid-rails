@@ -17,6 +17,12 @@ describe Hashid::Rails do
     expect(Model.decode_id('z3m059')).to eql actual_id
   end
 
+  describe '.to_param' do
+    it 'returns the hashid' do
+      expect(model.to_param).to eql 'z3m059'
+    end
+  end
+
   describe '.configure' do
     after(:each) { Hashid::Rails.reset }
 
