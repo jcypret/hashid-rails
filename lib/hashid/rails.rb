@@ -50,8 +50,13 @@ module Hashid
       end
 
       def find(hashid)
-        return super hashid if caller.first(3).any?{|s| s =~ /active_record\/persistence.*reload/}
-        super decode_id(hashid) || hashid
+        model_reload? ? super(hashid) : super( decode_id(hashid) || hashid )
+      end
+
+      private
+
+      def model_reload?
+        caller.first(3).any?{|s| s =~ /active_record\/persistence.*reload/}
       end
     end
 
