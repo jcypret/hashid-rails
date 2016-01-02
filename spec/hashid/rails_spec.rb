@@ -25,11 +25,7 @@ describe Hashid::Rails do
       end
     end
 
-    after(:each) do
-      Hashid::Rails.configure do |config|
-        config.secret = ''
-      end
-    end
+    after(:each) { Hashid::Rails.reset }
 
     it 'encodes to a different hashid' do
       expect(model.encoded_id).to eql 'vGENK4'
@@ -106,4 +102,3 @@ class FakeConnection
 
   end
 end
-

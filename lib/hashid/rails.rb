@@ -14,6 +14,11 @@ module Hashid
       yield(configuration)
     end
 
+    # Reset gem configuration to defaults
+    def self.reset
+      self.configuration = Configuration.new
+    end
+
 
     def self.included(base)
       base.extend ClassMethods
