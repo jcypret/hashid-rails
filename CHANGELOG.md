@@ -4,6 +4,7 @@
 
 - Customize the Hashid seed and length using a configuration initializer.
 - Add test coverage
+- Fix issue where calling `.reload` on model retries to `decode_id`.
 
 ## 0.1.2 (2015-04-12)
 
