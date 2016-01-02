@@ -62,6 +62,20 @@ describe Hashid::Rails do
 
   end
 
+  describe '#reset' do
+    it 'resets the gem configuration to defaults' do
+      Hashid::Rails.configure do |config|
+        config.secret = 'my secret'
+      end
+
+      expect(Hashid::Rails.configuration.secret).to eq 'my secret'
+
+      Hashid::Rails.reset
+
+      expect(Hashid::Rails.configuration.secret).to eq ''
+    end
+  end
+
 end
 
 class Model < ActiveRecord::Base
