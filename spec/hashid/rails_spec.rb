@@ -3,17 +3,18 @@ require 'spec_helper'
 describe Hashid::Rails do
 
   subject(:model) { Model.new }
+  let(:actual_id) { model.id }
 
   it 'has a version number' do
     expect(Hashid::Rails::VERSION).not_to be nil
   end
 
   it 'encodes a hashid' do
-    expect(model.encoded_id).to eql '4zKEeJ'
+    expect(model.encoded_id).to eql 'z3m059'
   end
 
   it 'decodes a hashid' do
-    expect(Model.decode_id('4zKEeJ')).to eql 1
+    expect(Model.decode_id('z3m059')).to eql actual_id
   end
 
   describe 'configure' do
@@ -31,12 +32,38 @@ describe Hashid::Rails do
     end
 
     it 'encodes to a different hashid' do
-      expect(model.encoded_id).to eql 'pVNwvq'
+      expect(model.encoded_id).to eql 'vGENK4'
     end
 
     it 'decodes a hashid' do
-      expect(Model.decode_id('pVNwvq')).to eql 1
+      expect(Model.decode_id('vGENK4')).to eql actual_id
     end
+  end
+
+  describe '#reload' do
+
+    let(:decoded_id) { Model.decode_id(actual_id) } # 26894362
+
+    before do
+      # to find an id that decodes as if it were a valid hashid (by brute force)
+      #(10000..100000000).each do |i|
+      #  decoded_id = Model.decode_id(i)
+      #  raise "#{decoded_id} decodes from real id #{i}" if decoded_id
+      #end
+    end
+
+    it 'prerequesite: real id returns a value from decode_id' do
+      expect(decoded_id).to_not be_nil
+      expect(Model.decode_id(actual_id)).to eql decoded_id
+    end
+
+    it 'should use real id' do
+      expect_any_instance_of(Model::ActiveRecord_Relation).to receive(:find_with_ids) do |instance, id|
+        expect(id).to eql actual_id
+      end
+      expect(subject.reload).to eql subject
+    end
+
   end
 
 end
@@ -64,11 +91,19 @@ class Model < ActiveRecord::Base
   end
 
   def id
-    1
+    100117
   end
 
   def self.connection
-    nil
+    FakeConnection.new
   end
 
 end
+
+class FakeConnection
+
+  def clear_query_cache
+
+  end
+end
+
