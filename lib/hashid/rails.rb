@@ -5,20 +5,20 @@ require 'active_record'
 module Hashid
   module Rails
 
-    class << self
-      attr_accessor :configuration
+    # Get configuration or load defaults
+    def self.configuration
+      @configuration ||= Configuration.new
     end
 
+    # Set configuration settings with a block
     def self.configure
-      self.configuration ||= Configuration.new
       yield(configuration)
     end
 
     # Reset gem configuration to defaults
     def self.reset
-      self.configuration = Configuration.new
+      @configuration = Configuration.new
     end
-
 
     def self.included(base)
       base.extend ClassMethods
@@ -36,8 +36,9 @@ module Hashid
     module ClassMethods
 
       def hashids
-        secret = Hashid::Rails.configuration ? Hashid::Rails.configuration.secret : ''
-        Hashids.new("#{table_name}#{secret}", 6)
+        secret = Hashid::Rails.configuration.secret
+        length = Hashid::Rails.configuration.length
+        Hashids.new("#{table_name}#{secret}", length)
       end
 
       def encode_id(id)
@@ -55,15 +56,15 @@ module Hashid
     end
 
     class Configuration
-      attr_accessor :secret
+      attr_accessor :secret, :length
 
       def initialize
         @secret = ''
+        @length = 6
       end
-
     end
-  end
 
+  end
 end
 
 ActiveRecord::Base.send :include, Hashid::Rails

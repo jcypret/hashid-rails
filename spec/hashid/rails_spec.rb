@@ -17,23 +17,39 @@ describe Hashid::Rails do
     expect(Model.decode_id('z3m059')).to eql actual_id
   end
 
-  describe 'configure' do
+  describe '.configure' do
+    after(:each) { Hashid::Rails.reset }
 
-    before(:each) do
-      Hashid::Rails.configure do |config|
-        config.secret = 'my secret'
+    describe 'secret' do
+      before(:each) do
+        Hashid::Rails.configure do |config|
+          config.secret = 'my secret'
+        end
+      end
+
+      it 'encodes to a different hashid' do
+        expect(model.encoded_id).to eql 'vGENK4'
+      end
+
+      it 'decodes a hashid' do
+        expect(Model.decode_id('vGENK4')).to eql actual_id
       end
     end
 
-    after(:each) { Hashid::Rails.reset }
+    describe 'length' do
+      it 'defaults to six' do
+        expect(model.encoded_id.length).to eql 6
+      end
 
-    it 'encodes to a different hashid' do
-      expect(model.encoded_id).to eql 'vGENK4'
+      it 'can be customized' do
+        Hashid::Rails.configure do |config|
+          config.length = 13
+        end
+
+        expect(model.encoded_id.length).to eql 13
+      end
     end
 
-    it 'decodes a hashid' do
-      expect(Model.decode_id('vGENK4')).to eql actual_id
-    end
   end
 
   describe '#reload' do
@@ -68,11 +84,11 @@ describe Hashid::Rails do
         config.secret = 'my secret'
       end
 
-      expect(Hashid::Rails.configuration.secret).to eq 'my secret'
+      expect(Hashid::Rails.configuration.secret).to eql 'my secret'
 
       Hashid::Rails.reset
 
-      expect(Hashid::Rails.configuration.secret).to eq ''
+      expect(Hashid::Rails.configuration.secret).to eql ''
     end
   end
 
