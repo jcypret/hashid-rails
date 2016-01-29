@@ -19,11 +19,15 @@ gem 'hashid-rails'
 
 And then execute:
 
-    $ bundle
+```shell
+$ bundle
+```
 
 Or install it yourself as:
 
-    $ gem install hashid-rails
+```shell
+$ gem install hashid-rails
+```
 
 ## Usage
 
