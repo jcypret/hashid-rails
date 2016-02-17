@@ -38,7 +38,12 @@ module Hashid
       def hashids
         secret = Hashid::Rails.configuration.secret
         length = Hashid::Rails.configuration.length
-        Hashids.new("#{table_name}#{secret}", length)
+        alphabet = Hashid::Rails.configuration.alphabet
+
+        arguments = ["#{table_name}#{secret}", length]
+        arguments << alphabet if alphabet.present?
+
+        Hashids.new(*arguments)
       end
 
       def encode_id(id)
@@ -61,11 +66,12 @@ module Hashid
     end
 
     class Configuration
-      attr_accessor :secret, :length
+      attr_accessor :secret, :length, :alphabet
 
       def initialize
         @secret = ''
         @length = 6
+        @alphabet = nil
       end
     end
 
