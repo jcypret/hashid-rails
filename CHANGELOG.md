@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.3.0 (2016-03-10)
+- Customize the alphabet used for Hashids
+
 ## 0.2.0 (2016-01-02)
 
 - Customize the Hashid seed and length using a configuration initializer.
