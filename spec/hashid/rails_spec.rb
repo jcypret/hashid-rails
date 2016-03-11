@@ -56,6 +56,35 @@ describe Hashid::Rails do
       end
     end
 
+    describe 'alphabet' do
+      let(:expected_alphabet) { 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' }
+      let(:config) { Hashid::Rails.configuration }
+
+      context 'with custom alphabet' do
+        before :each do
+          Hashid::Rails.configure do |config|
+            config.alphabet = expected_alphabet
+          end
+        end
+
+        it 'initializes hashid correctly'  do
+          expect(Hashids).to receive(:new)
+                         .with('models', config.length, expected_alphabet)
+
+          Model.hashids
+        end
+      end
+
+      context 'with no custom alphabet' do
+        it 'initializes hashid correctly' do
+          expect(Hashids).to receive(:new)
+                         .with('models', config.length)
+
+          Model.hashids
+        end
+      end
+    end
+
   end
 
   describe '#reload' do

@@ -46,6 +46,9 @@ easily reverse engineer your ids, create an initializer and:
 Hashid::Rails.configure do |config|
   config.secret = 'my secret'
   config.length = 6
+  # config.alphabet is optional, hashids provides a default
+  # alphabet that consists of all characters [a-zA-Z0-9]
+  config.alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 end
 ```
 
