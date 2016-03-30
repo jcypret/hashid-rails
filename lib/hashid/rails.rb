@@ -46,8 +46,12 @@ module Hashid
         Hashids.new(*arguments)
       end
 
-      def encode_id(id)
-        hashid_encode(id)
+      def encode_id(ids)
+        if ids.is_a?(Array)
+          ids.map { |id| hashid_encode(id) }
+        else
+          hashid_encode(ids)
+        end
       end
 
       def decode_id(ids)
