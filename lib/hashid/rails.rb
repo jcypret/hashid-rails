@@ -51,7 +51,11 @@ module Hashid
       end
 
       def decode_id(id)
-        hashids.decode(id.to_s).first
+        if id.is_a? Array
+          hashids.decode(id.first.to_s).first
+        else
+          hashids.decode(id.to_s).first
+        end
       end
 
       def find(hashid)
