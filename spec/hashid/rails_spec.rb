@@ -102,9 +102,19 @@ describe Hashid::Rails do
     it 'prerequesite: real id returns a value from decode_id' do
       expect(decoded_id).to_not be_nil
       expect(Model.decode_id(actual_id)).to eql decoded_id
+    end
 
-      # @TODO: Debug why its an array
-      expect(Model.decode_id([actual_id])).to eql decoded_id
+    it 'returns an array when array is passed in' do
+      expect(Model.decode_id([actual_id])).to eql [decoded_id]
+    end
+
+    it 'decodes multiple ids in array' do
+      decoded_ids = Model.decode_id([
+        Model.encode_id(1),
+        Model.encode_id(3),
+        Model.encode_id(5),
+      ])
+      expect(decoded_ids).to eql [1, 3, 5]
     end
 
     it 'should use real id' do
@@ -113,9 +123,6 @@ describe Hashid::Rails do
       end
       expect(subject.reload).to eql subject
     end
-
-
-
   end
 
   describe '#reset' do

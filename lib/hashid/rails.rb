@@ -47,14 +47,14 @@ module Hashid
       end
 
       def encode_id(id)
-        hashids.encode(id)
+        hashid_encode(id)
       end
 
-      def decode_id(id)
-        if id.is_a? Array
-          hashids.decode(id.first.to_s).first
+      def decode_id(ids)
+        if ids.is_a?(Array)
+          ids.map { |id| hashid_decode(id) }
         else
-          hashids.decode(id.to_s).first
+          hashid_decode(ids)
         end
       end
 
@@ -66,6 +66,14 @@ module Hashid
 
       def model_reload?
         caller.any? {|s| s =~ /active_record\/persistence.*reload/}
+      end
+
+      def hashid_decode(id)
+        hashids.decode(id.to_s).first
+      end
+
+      def hashid_encode(id)
+        hashids.encode(id)
       end
     end
 
