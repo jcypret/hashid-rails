@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.3.2 (2016-03-30)
+- Multiple ids can be passed to `find` method
+
 ## 0.3.1 (2016-03-10)
 - Update Rails dependency to work with Rails 4.0 and up.
 
