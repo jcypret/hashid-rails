@@ -36,6 +36,13 @@ describe Hashid::Rails do
     expect(encoded_ids).to eq ['YznovR', 'OeVre9', 'YNAOva']
   end
 
+  describe '.find_by_hashid' do
+    it 'calls find with decoded id' do
+      expect(Model).to receive(:find_by!).with({id: 4})
+      Model.find_by_hashid('OeVre9')
+    end
+  end
+
   describe '.to_param' do
     it 'returns the hashid' do
       expect(model.to_param).to eql 'z3m059'
@@ -167,6 +174,10 @@ class Model < ActiveRecord::Base
 
   def self.column_types
     columns_hash
+  end
+
+  def self.find_by!(attrs = {})
+    Model.new
   end
 
   def id
