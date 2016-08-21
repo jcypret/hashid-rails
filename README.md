@@ -29,7 +29,7 @@ Or install it yourself as:
 $ gem install hashid-rails
 ```
 
-## Usage
+## Basic Usage
 
 Just use `Model#find` passing in the hashid instead of the model id.
 
@@ -37,21 +37,20 @@ Just use `Model#find` passing in the hashid instead of the model id.
 @person = Person.find(params[:hashid])
 ```
 
-Alternatively, you can use the `Model#find_by_hashid` method to find the record
-without falling back on the standard `find` method. This can be useful in cases
-where the hashid might be misinterpreted by the `find` method, such as using a
-hashid containing only numbers that could be both interpreted as either an id
-and or a hashid.
+## Alternative Usage
+
+You can use the `Model#find_by_hashid` method to find a record without falling
+back on the standard `find` method. This can be useful in cases where the hashid
+might be misinterpreted by the `find` method, such as using a hashid containing
+only numbers that could be both interpreted as either an id and or a hashid.
 
 ```ruby
 # When a record is found, it returns the record.
 @person = Person.find_by_hashid(params[:hashid])
 
 # When no record, is found it raises an exception.
-# ActiveRecord::RecordNotFound: Couldn't find Person with 'id'=123
+ActiveRecord::RecordNotFound
 ```
-
-> Warning: This gem overrides `find` to accept either a raw ID or a HashID, in order to be a drop-in replacement for your project. This can cause problems when an input is ambiguous, as in the case of a number-only HashID. Therefore, it is recommended that the configured HashIDs "alphabet" should not contain any integers, but be letters only. See [this issue](https://github.com/jcypret/hashid-rails/issues/12) for more information.
 
 ## Configuration
 
