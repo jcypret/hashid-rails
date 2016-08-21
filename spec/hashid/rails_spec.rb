@@ -131,9 +131,10 @@ describe Hashid::Rails do
     end
 
     it 'should use real id' do
-      expect_any_instance_of(Model::ActiveRecord_Relation).to receive(:find_with_ids) do |instance, id|
-        expect(id).to eql actual_id
-      end
+      expect_any_instance_of(Model::ActiveRecord_Relation)
+        .to receive(:find_with_ids) do |instance, id|
+          expect(id).to eql actual_id
+        end
       expect(subject.reload).to eql subject
     end
   end
@@ -160,24 +161,12 @@ class Model < ActiveRecord::Base
     {id: ActiveRecord::ConnectionAdapters::Column.new('id', nil, 'integer', 'integer')}
   end
 
-  def self.attributes_builder
-    @attributes_builder ||= ActiveRecord::AttributeSet::Builder.new(column_types, columns_hash[:id])
-  end
-
   def self.columns
     columns_hash.map {|k,v| v}
   end
 
   def self.get_primary_key(base_name)
     columns_hash[:id]
-  end
-
-  def self.column_types
-    columns_hash
-  end
-
-  def self.find_by!(attrs = {})
-    Model.new
   end
 
   def id
