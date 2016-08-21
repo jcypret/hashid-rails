@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.4.0 (2016-08-21)
+- Add `find_by_hashid` method to always try and decode, as opposed to `find` which tries to find it as an integer first.
+
 ## 0.3.2 (2016-03-30)
 - Multiple ids can be passed to `find` method
 

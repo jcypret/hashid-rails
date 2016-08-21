@@ -94,18 +94,18 @@ describe Hashid::Rails do
         end
 
         it 'initializes hashid correctly'  do
-          expect(Hashids).to receive(:new)
-                         .with('models', config.length, expected_alphabet)
-
+          expect(Hashids)
+            .to receive(:new)
+            .with('models', config.length, expected_alphabet)
           Model.hashids
         end
       end
 
       context 'with no custom alphabet' do
         it 'initializes hashid correctly' do
-          expect(Hashids).to receive(:new)
-                         .with('models', config.length)
-
+          expect(Hashids)
+            .to receive(:new)
+            .with('models', config.length)
           Model.hashids
         end
       end
