@@ -1,10 +1,13 @@
 # Changelog
 
 ## 0.4.0 (2016-08-21)
+- Limit installations to Rails 4.x; gem is not yet Rails 5 compatible.
+
+## 0.4.0 (2016-08-21)
 - Add `find_by_hashid` method to always try and decode, as opposed to `find` which tries to find it as an integer first.
 
 ## 0.3.2 (2016-03-30)
-- Multiple ids can be passed to `find` method
+- Multiple ids can be passed to `find` method.
 
 ## 0.3.1 (2016-03-10)
 - Update Rails dependency to work with Rails 4.0 and up.

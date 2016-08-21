@@ -29,6 +29,8 @@ Or install it yourself as:
 $ gem install hashid-rails
 ```
 
+> Note: This gem is not yet compatible with Rails 5.
+
 ## Basic Usage
 
 Just use `Model#find` passing in the hashid instead of the model id.
