@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Hashid::Rails do
-
   subject(:model) { Model.new }
   let(:actual_id) { model.id }
 
@@ -110,20 +109,15 @@ describe Hashid::Rails do
         end
       end
     end
-
   end
 
   describe '#reload' do
-
+    # to find an id that decodes as if it were a valid hashid (by brute force)
+    # (10000..100000000).each do |i|
+    #   decoded_id = Model.decode_id(i)
+    #   raise "#{decoded_id} decodes from real id #{i}" if decoded_id
+    # end
     let(:decoded_id) { Model.decode_id(actual_id) } # 26894362
-
-    before do
-      # to find an id that decodes as if it were a valid hashid (by brute force)
-      #(10000..100000000).each do |i|
-      #  decoded_id = Model.decode_id(i)
-      #  raise "#{decoded_id} decodes from real id #{i}" if decoded_id
-      #end
-    end
 
     it 'prerequesite: real id returns a value from decode_id' do
       expect(decoded_id).to_not be_nil
@@ -152,11 +146,9 @@ describe Hashid::Rails do
       expect(Hashid::Rails.configuration.secret).to eql ''
     end
   end
-
 end
 
 class Model < ActiveRecord::Base
-
   def self.columns_hash
     {id: ActiveRecord::ConnectionAdapters::Column.new('id', nil, 'integer', 'integer')}
   end
@@ -176,7 +168,6 @@ class Model < ActiveRecord::Base
   def self.connection
     FakeConnection.new
   end
-
 end
 
 class FakeConnection
