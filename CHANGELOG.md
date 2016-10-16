@@ -1,6 +1,9 @@
 # Changelog
 
-## 0.4.0 (2016-08-21)
+## 0.5.0 (2016-10-15)
+- Update specs to support Rails 5.x series.
+
+## 0.4.1 (2016-08-21)
 - Limit installations to Rails 4.x; gem is not yet Rails 5 compatible.
 
 ## 0.4.0 (2016-08-21)
