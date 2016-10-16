@@ -111,9 +111,6 @@ describe Hashid::Rails do
     end
   end
 
-  describe '#reload' do
-  end
-
   describe '#reset' do
     it 'resets the gem configuration to defaults' do
       Hashid::Rails.configure do |config|
