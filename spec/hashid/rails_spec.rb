@@ -125,11 +125,3 @@ describe Hashid::Rails do
     end
   end
 end
-
-class FakeModel
-  attr_accessor :id
-  include ActiveModel::Model
-  include Hashid::Rails
-
-  def self.table_name() "models" end
-end
