@@ -1,10 +1,9 @@
-require 'hashid/rails/version'
-require 'hashids'
-require 'active_record'
+require "hashid/rails/version"
+require "hashids"
+require "active_record"
 
 module Hashid
   module Rails
-
     # Get configuration or load defaults
     def self.configuration
       @configuration ||= Configuration.new
@@ -31,10 +30,9 @@ module Hashid
     def to_param
       encoded_id
     end
-    alias_method :hashid, :to_param
+    alias hashid to_param
 
     module ClassMethods
-
       def hashids
         secret = Hashid::Rails.configuration.secret
         length = Hashid::Rails.configuration.length
@@ -63,7 +61,7 @@ module Hashid
       end
 
       def find(hashid)
-        model_reload? ? super(hashid) : super( decode_id(hashid) || hashid )
+        model_reload? ? super(hashid) : super(decode_id(hashid) || hashid)
       end
 
       def find_by_hashid(hashid)
@@ -73,7 +71,7 @@ module Hashid
       private
 
       def model_reload?
-        caller.any? {|s| s =~ /active_record\/persistence.*reload/}
+        caller.any? { |s| s =~ %r{ active_record/persistence.*reload } }
       end
 
       def hashid_decode(id)
@@ -89,12 +87,11 @@ module Hashid
       attr_accessor :secret, :length, :alphabet
 
       def initialize
-        @secret = ''
+        @secret = ""
         @length = 6
         @alphabet = nil
       end
     end
-
   end
 end
 

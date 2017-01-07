@@ -1,0 +1,10 @@
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+Style/IndentArray:
+  EnforcedStyle: consistent
+Style/Documentation:
+  Enabled: false
+Style/BlockLength:
+  Exclude:
+  - "*.gemspec"
+  - "spec/**/*.rb"
