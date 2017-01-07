@@ -1,8 +1,8 @@
-require 'codeclimate-test-reporter'
-CodeClimate::TestReporter.start
+require "simplecov"
+SimpleCov.start
 
-$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
-require 'hashid/rails'
+$LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
+require "hashid/rails"
 
 ActiveRecord::Base.establish_connection adapter: "sqlite3", database: ":memory:"
 require_relative "support/schema"
