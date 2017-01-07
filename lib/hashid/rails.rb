@@ -1,4 +1,5 @@
 require "hashid/rails/version"
+require "hashid/rails/configuration"
 require "hashids"
 require "active_record"
 
@@ -80,16 +81,6 @@ module Hashid
 
       def hashid_encode(id)
         hashids.encode(id)
-      end
-    end
-
-    class Configuration
-      attr_accessor :secret, :length, :alphabet
-
-      def initialize
-        @secret = ""
-        @length = 6
-        @alphabet = nil
       end
     end
   end
