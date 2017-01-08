@@ -31,6 +31,15 @@ describe Hashid::Rails do
     expect(decoded_ids).to eql [1, 3, 5]
   end
 
+  it "finds muliple un-encoded ids" do
+    model_one = FakeModel.create!
+    model_two = FakeModel.create!
+
+    FakeModel.find([model_one.id, model_two.id])
+
+    FakeModel.delete_all
+  end
+
   it "encodes multiple ids" do
     encoded_ids = FakeModel.encode_id([2, 4, 6])
     expect(encoded_ids).to eq %w(YznovR OeVre9 YNAOva)

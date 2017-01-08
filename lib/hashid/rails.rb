@@ -55,7 +55,8 @@ module Hashid
 
       def decode_id(ids)
         if ids.is_a?(Array)
-          ids.map { |id| hashid_decode(id) }
+          decoded_ids = ids.map { |id| hashid_decode(id) }
+          decoded_ids.any? ? decoded_ids : nil
         else
           hashid_decode(ids)
         end
