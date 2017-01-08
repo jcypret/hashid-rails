@@ -33,6 +33,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "codeclimate-test-reporter"
   spec.add_development_dependency "sqlite3"
   spec.add_development_dependency "rubocop"
+  spec.add_development_dependency "byebug"
 
   spec.add_runtime_dependency "activerecord", ">= 4.0"
   spec.add_runtime_dependency "hashids", "~> 1.0"
