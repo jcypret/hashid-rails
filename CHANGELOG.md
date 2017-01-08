@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.6.0 (2017-01-07)
+- Add Rubocop and adjust styles to be consistent.
+- Fix issue where finding multiple non-hashids returns an array of nils.
+- Switch over testing to use SQLite for more accurate db interactions.
+
 ## 0.5.0 (2016-10-15)
 - Update specs to support Rails 5.x series.
 
