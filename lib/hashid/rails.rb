@@ -63,7 +63,11 @@ module Hashid
       end
 
       def find(hashid)
-        model_reload? ? super(hashid) : super(decode_id(hashid) || hashid)
+        if model_reload? || Hashid::Rails.configuration.disable_find
+          super(hashid)
+        else
+          super(decode_id(hashid) || hashid)
+        end
       end
 
       def find_by_hashid(hashid)

@@ -119,6 +119,49 @@ describe Hashid::Rails do
         end
       end
     end
+
+    describe "disable_find" do
+      let(:expected_alphabet) { "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789" }
+      let(:config) { Hashid::Rails.configuration }
+
+      before :each do
+        Hashid::Rails.configure do |config|
+          config.alphabet = expected_alphabet
+          config.length = 6
+        end
+      end
+
+      context "unset" do
+        it "unhashes argument in find method" do
+          # 100_024 was selected because it unhashes to 187_412
+          model = FakeModel.create!
+          model.update!(id: 187_412)
+          expect(FakeModel.find(100_024).id).to eql 187_412
+        end
+      end
+
+      context "set to false" do
+        it "unhashes argument in find method" do
+          Hashid::Rails.configure do |config|
+            config.disable_find = false
+          end
+          # 100_024 was selected because it unhashes to 187_412
+          expect(FakeModel.find(100_024).id).to eql 187_412
+        end
+      end
+
+      context "set to true" do
+        it "does not unhash argument in find method" do
+          Hashid::Rails.configure do |config|
+            config.disable_find = true
+          end
+          # 100024 was selected because it unhashes to 187412
+          model = FakeModel.create!
+          model.update!(id: 100_024)
+          expect(FakeModel.find(100_024).id).to eql 100_024
+        end
+      end
+    end
   end
 
   describe "#reset" do
