@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.7.0 (2017-02-15)
+- Add configuration option to disable overriding default `find` (#22).
+
 ## 0.6.0 (2017-01-07)
 - Add Rubocop and adjust styles to be consistent.
 - Fix issue where finding multiple non-hashids returns an array of nils.
