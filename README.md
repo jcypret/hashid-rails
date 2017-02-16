@@ -65,8 +65,23 @@ Hashid::Rails.configure do |config|
   # config.alphabet is optional, hashids provides a default
   # alphabet that consists of all characters [a-zA-Z0-9]
   config.alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+  
+  # If your alphbet contains any numerals [0-9], then we recommend diabling the find method
+  #config.disable_find = true
 end
 ```
+### Disable Find Method
+
+If your alphabet includes numerals (0-9) and if the ids in your database are the same length as your hashes, then there could be valid
+hashids that are identical to valid ids.  This ambiguity could lead the `find` method to behave unpredictably.  Since `find` accepts both
+hashids and ids, an input argument that is potentially both a valid hashid and id, will cause `find` to treat the argument as a hashid
+in some cases, and as an id in others.  This unpredictably is usually not desired and can lead to subtle bugs appearing at runtime
+
+In order to avoid this problem, users can add `config.disable_find = true` to their initializer.  This will disable the hashid
+functionality of the `find` method and force `find` to only accept normal (unhashed) ids.  Under this configuration, programmer 
+will need to use the `find_by_hashid` method when desiring to explicitly search by hashid.
+
+It is recommended that `config.disable_find = true` be set when the alphabet contains any numerals.
 
 ## Development
 
