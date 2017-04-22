@@ -137,32 +137,30 @@ describe Hashid::Rails do
     after(:each) { Hashid::Rails.reset }
 
     describe "secret" do
-      before(:each) do
+      it "defaults to empty string" do
+        expect(Hashid::Rails.configuration.secret).to eq("")
+      end
+
+      it "updates config" do
         Hashid::Rails.configure do |config|
-          config.secret = "my secret"
+          config.secret = "mysecret"
         end
-      end
 
-      it "encodes to a different hashid" do
-        expect(model.hashid).to eql "e3Yc4OyG"
-      end
-
-      it "decodes a hashid" do
-        expect(FakeModel.decode_id("e3Yc4OyG")).to eql actual_id
+        expect(Hashid::Rails.configuration.secret).to eq("mysecret")
       end
     end
 
     describe "length" do
-      it "defaults to six" do
+      it "defaults to empty string" do
         expect(Hashid::Rails.configuration.length).to eq(6)
       end
 
-      it "encodes to custom length" do
+      it "updates config" do
         Hashid::Rails.configure do |config|
           config.length = 13
         end
 
-        expect(model.hashid.length).to eql 13
+        expect(Hashid::Rails.configuration.length).to eq 13
       end
     end
 
@@ -170,28 +168,17 @@ describe Hashid::Rails do
       let(:expected_alphabet) { "ABCDEFGHIJKLMNOPQRSTUVWXYZ" }
       let(:config) { Hashid::Rails.configuration }
 
-      context "with custom alphabet" do
-        before :each do
-          Hashid::Rails.configure do |config|
-            config.alphabet = expected_alphabet
-          end
-        end
-
-        it "initializes hashid correctly" do
-          expect(Hashids)
-            .to receive(:new)
-            .with("models", config.length, expected_alphabet)
-          FakeModel.hashids
-        end
+      it "defaults to nil" do
+        expect(Hashid::Rails.configuration.alphabet).to eq(nil)
       end
 
-      context "with no custom alphabet" do
-        it "initializes hashid correctly" do
-          expect(Hashids)
-            .to receive(:new)
-            .with("models", config.length)
-          FakeModel.hashids
+      it "updates config" do
+        alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        Hashid::Rails.configure do |config|
+          config.alphabet = alphabet
         end
+
+        expect(Hashid::Rails.configuration.alphabet).to eq(alphabet)
       end
     end
 
