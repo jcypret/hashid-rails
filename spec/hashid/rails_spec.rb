@@ -128,8 +128,8 @@ describe Hashid::Rails do
     end
 
     it "does not try and decode regular ids" do
-      decoded_id = FakeModel.decode_id(100117)
-      expect(decoded_id).to eq(100117)
+      decoded_id = FakeModel.decode_id(100_117)
+      expect(decoded_id).to eq(100_117)
     end
   end
 
@@ -153,8 +153,8 @@ describe Hashid::Rails do
     end
 
     describe "length" do
-      xit "defaults to six" do
-        expect(FakeModel.configurations.length).to eql 6
+      it "defaults to six" do
+        expect(Hashid::Rails.configuration.length).to eq(6)
       end
 
       it "encodes to custom length" do
@@ -208,10 +208,11 @@ describe Hashid::Rails do
 
       context "unset" do
         it "unhashes argument in find method" do
-          # 100_024 was selected because it unhashes to 187_412
           model = FakeModel.create!
-          model.update!(id: 187_412)
-          expect(FakeModel.find(100_024).id).to eql 187_412
+
+          result = FakeModel.find(model.hashid)
+
+          expect(result).to eq(model)
         end
       end
 
@@ -220,8 +221,11 @@ describe Hashid::Rails do
           Hashid::Rails.configure do |config|
             config.disable_find = false
           end
-          # 100_024 was selected because it unhashes to 187_412
-          expect(FakeModel.find(100_024).id).to eql 187_412
+          model = FakeModel.create!
+
+          result = FakeModel.find(model.hashid)
+
+          expect(result).to eq(model)
         end
       end
 
@@ -230,10 +234,10 @@ describe Hashid::Rails do
           Hashid::Rails.configure do |config|
             config.disable_find = true
           end
-          # 100024 was selected because it unhashes to 187412
           model = FakeModel.create!
-          model.update!(id: 100_024)
-          expect(FakeModel.find(100_024).id).to eql 100_024
+
+          expect { FakeModel.find(model.hashid) }
+            .to raise_error(ActiveRecord::RecordNotFound)
         end
       end
     end
