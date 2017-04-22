@@ -5,6 +5,9 @@ require "active_record"
 
 module Hashid
   module Rails
+    # Arbitrary value to verify hashid
+    HASHID_KEY = 72 # "H".ord
+
     # Get configuration or load defaults
     def self.configuration
       @configuration ||= Configuration.new
@@ -81,11 +84,14 @@ module Hashid
       end
 
       def hashid_decode(id)
-        hashids.decode(id.to_s).first
+        decoded_hashid = hashids.decode(id.to_s)
+        return unless decoded_hashid.size == 2
+        return unless decoded_hashid.first == HASHID_KEY
+        decoded_hashid.last
       end
 
       def hashid_encode(id)
-        hashids.encode(id)
+        hashids.encode(HASHID_KEY, id)
       end
     end
   end
