@@ -4,57 +4,133 @@ describe Hashid::Rails do
   subject(:model) { FakeModel.new(id: 100_117) }
   let(:actual_id) { model.id }
 
-  it "has a version number" do
-    expect(Hashid::Rails::VERSION).not_to be nil
-  end
-
-  it "encodes a hashid" do
-    expect(model.encoded_id).to eql "z3m059"
-  end
-
-  it "decodes a hashid" do
-    expect(FakeModel.decode_id("z3m059")).to eql actual_id
-  end
-
-  it "returns an array when array is passed in" do
-    encoded_ids = [FakeModel.encode_id(1)]
-    decoded_ids = FakeModel.decode_id(encoded_ids)
-    expect(decoded_ids).to eql [1]
-  end
-
-  it "decodes multiple ids in array" do
-    decoded_ids = FakeModel.decode_id([
-      FakeModel.encode_id(1),
-      FakeModel.encode_id(3),
-      FakeModel.encode_id(5)
-    ])
-    expect(decoded_ids).to eql [1, 3, 5]
-  end
-
-  it "finds muliple un-encoded ids" do
-    model_one = FakeModel.create!
-    model_two = FakeModel.create!
-
-    FakeModel.find([model_one.id, model_two.id])
-
-    FakeModel.delete_all
-  end
-
-  it "encodes multiple ids" do
-    encoded_ids = FakeModel.encode_id([2, 4, 6])
-    expect(encoded_ids).to eq %w(YznovR OeVre9 YNAOva)
-  end
-
-  describe ".find_by_hashid" do
-    it "calls find with decoded id" do
-      expect(FakeModel).to receive(:find_by!).with(id: 4)
-      FakeModel.find_by_hashid("OeVre9")
+  describe "#hashid" do
+    it "returns model ID encoded as hashid" do
+      model = FakeModel.new(id: 100_117)
+      expect(model.hashid).to eq("Qkmc18r3")
     end
   end
 
-  describe ".to_param" do
-    it "returns the hashid" do
-      expect(model.to_param).to eql "z3m059"
+  describe "#to_param" do
+    it "aliases #hashid" do
+      model = FakeModel.new(id: 100_117)
+      expect(model.hashid).to eq(model.to_param)
+    end
+  end
+
+  describe ".encode_id" do
+    context "when single id" do
+      it "returns hashid" do
+        encoded_id = FakeModel.encode_id(100_117)
+        expect(encoded_id).to eq("Qkmc18r3")
+      end
+    end
+
+    context "when array with a single id" do
+      it "returns an array with single hashid" do
+        encoded_ids = FakeModel.encode_id([1])
+        expect(encoded_ids).to eq(["NZwmcg"])
+      end
+    end
+
+    context "when array with many ids" do
+      it "returns an array of hashids" do
+        encoded_ids = FakeModel.encode_id([1, 2, 3])
+        expect(encoded_ids).to eq(["NZwmcg", "NEdycn", "e71MhR"])
+      end
+    end
+  end
+
+  describe ".decode_id" do
+    context "when single param" do
+      it "returns decoded hashid" do
+        decoded_id = FakeModel.decode_id("Qkmc18r3")
+        expect(decoded_id).to eq(100_117)
+      end
+
+      it "returns already decoded id" do
+        decoded_id = FakeModel.decode_id(100_117)
+        expect(decoded_id).to eq(100_117)
+      end
+    end
+
+    context "when an array" do
+      it "returns array with decoded hashid" do
+        decoded_ids = FakeModel.decode_id(["NZwmcg"])
+        expect(decoded_ids).to eq([1])
+      end
+
+      it "returns array with already decoded id" do
+        decoded_ids = FakeModel.decode_id([1])
+        expect(decoded_ids).to eq([1])
+      end
+    end
+
+    context "when array with many hashid" do
+      it "returns array of decoded hashids" do
+        decoded_ids = FakeModel.decode_id(["NZwmcg", "NEdycn", "e71MhR"])
+        expect(decoded_ids).to eq([1, 2, 3])
+      end
+
+      it "returns array of already decoded ids" do
+        decoded_ids = FakeModel.decode_id([1, 2, 3])
+        expect(decoded_ids).to eq([1, 2, 3])
+      end
+    end
+  end
+
+  describe ".find" do
+    context "when finding single model" do
+      it "returns correct model by hashid" do
+        model = FakeModel.create!
+
+        result = FakeModel.find(model.hashid)
+
+        expect(result).to eq(model)
+      end
+
+      it "returns correct model by id" do
+        model = FakeModel.create!
+
+        result = FakeModel.find(model.id)
+
+        expect(result).to eq(model)
+      end
+    end
+
+    context "when finding multiple models" do
+      it "returns correct models by hashids" do
+        model1 = FakeModel.create!
+        model2 = FakeModel.create!
+
+        result = FakeModel.find([model1.hashid, model2.hashid])
+
+        expect(result).to eq([model1, model2])
+      end
+
+      it "returns correct models by ids" do
+        model1 = FakeModel.create!
+        model2 = FakeModel.create!
+
+        result = FakeModel.find([model1.id, model2.id])
+
+        expect(result).to eq([model1, model2])
+      end
+
+      it "returns correct models by mix of hashids and ids" do
+        model1 = FakeModel.create!
+        model2 = FakeModel.create!
+
+        result = FakeModel.find([model1.hashid, model2.id])
+
+        expect(result).to eq([model1, model2])
+      end
+    end
+
+    it "does not confuse regular ids" do
+      (1..1_000_000).each do |i|
+        raise unless FakeModel.decode_id(i) == i
+      end
     end
   end
 
@@ -69,17 +145,17 @@ describe Hashid::Rails do
       end
 
       it "encodes to a different hashid" do
-        expect(model.encoded_id).to eql "vGENK4"
+        expect(model.hashid).to eql "e3Yc4OyG"
       end
 
       it "decodes a hashid" do
-        expect(FakeModel.decode_id("vGENK4")).to eql actual_id
+        expect(FakeModel.decode_id("e3Yc4OyG")).to eql actual_id
       end
     end
 
     describe "length" do
-      it "defaults to six" do
-        expect(model.encoded_id.length).to eql 6
+      xit "defaults to six" do
+        expect(FakeModel.configurations.length).to eql 6
       end
 
       it "encodes to custom length" do
@@ -87,7 +163,7 @@ describe Hashid::Rails do
           config.length = 13
         end
 
-        expect(model.encoded_id.length).to eql 13
+        expect(model.hashid.length).to eql 13
       end
     end
 

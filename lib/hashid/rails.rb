@@ -27,14 +27,10 @@ module Hashid
       base.extend ClassMethods
     end
 
-    def encoded_id
+    def hashid
       self.class.encode_id(id)
     end
-
-    def to_param
-      encoded_id
-    end
-    alias hashid to_param
+    alias to_param hashid
 
     module ClassMethods
       def hashids
@@ -58,8 +54,7 @@ module Hashid
 
       def decode_id(ids)
         if ids.is_a?(Array)
-          decoded_ids = ids.map { |id| hashid_decode(id) }
-          decoded_ids.any? ? decoded_ids : nil
+          ids.map { |id| hashid_decode(id) }
         else
           hashid_decode(ids)
         end
@@ -73,10 +68,6 @@ module Hashid
         end
       end
 
-      def find_by_hashid(hashid)
-        find_by!(id: hashid_decode(hashid))
-      end
-
       private
 
       def model_reload?
@@ -85,8 +76,8 @@ module Hashid
 
       def hashid_decode(id)
         decoded_hashid = hashids.decode(id.to_s)
-        return unless decoded_hashid.size == 2
-        return unless decoded_hashid.first == HASHID_KEY
+        return id unless decoded_hashid.size == 2
+        return id unless decoded_hashid.first == HASHID_KEY
         decoded_hashid.last
       end
 
