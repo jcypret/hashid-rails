@@ -6,7 +6,7 @@ require "active_record"
 module Hashid
   module Rails
     # Arbitrary value to verify hashid
-    HASHID_KEY = 72 # "H".ord
+    HASHID_TOKEN = 72 # "H".ord
 
     # Get configuration or load defaults
     def self.configuration
@@ -74,15 +74,18 @@ module Hashid
         caller.any? { |s| s =~ %r{ active_record/persistence.*reload } }
       end
 
+      def hashid_encode(id)
+        hashids.encode(HASHID_TOKEN, id)
+      end
+
       def hashid_decode(id)
         decoded_hashid = hashids.decode(id.to_s)
-        return id unless decoded_hashid.size == 2
-        return id unless decoded_hashid.first == HASHID_KEY
+        return id unless valid_hashid?(decoded_hashid)
         decoded_hashid.last
       end
 
-      def hashid_encode(id)
-        hashids.encode(HASHID_KEY, id)
+      def valid_hashid?(decoded_hashid)
+        decoded_hashid.size == 2 && decoded_hashid.first == HASHID_TOKEN
       end
     end
   end
