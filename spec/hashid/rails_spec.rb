@@ -127,10 +127,9 @@ describe Hashid::Rails do
       end
     end
 
-    it "does not confuse regular ids" do
-      (1..1_000_000).each do |i|
-        raise unless FakeModel.decode_id(i) == i
-      end
+    it "does not try and decode regular ids" do
+      decoded_id = FakeModel.decode_id(100117)
+      expect(decoded_id).to eq(100117)
     end
   end
 
