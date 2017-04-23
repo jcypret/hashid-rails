@@ -65,7 +65,7 @@ describe Hashid::Rails do
     context "when array with many ids" do
       it "returns an array of hashids" do
         encoded_ids = FakeModel.encode_id([1, 2, 3])
-        expect(encoded_ids).to eq(["NPdiEN", "NwniBe", "zKwimz"])
+        expect(encoded_ids).to eq(%w[NPdiEN NwniBe zKwimz])
       end
     end
   end
@@ -97,7 +97,7 @@ describe Hashid::Rails do
 
     context "when array with many hashid" do
       it "returns array of decoded hashids" do
-        decoded_ids = FakeModel.decode_id(["NPdiEN", "NwniBe", "zKwimz"])
+        decoded_ids = FakeModel.decode_id(%w[NPdiEN NwniBe zKwimz])
         expect(decoded_ids).to eq([1, 2, 3])
       end
 
@@ -264,5 +264,4 @@ describe Hashid::Rails do
       expect(Hashid::Rails.configuration.secret).to eql ""
     end
   end
-
 end
