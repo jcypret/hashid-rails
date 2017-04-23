@@ -193,6 +193,37 @@ describe Hashid::Rails do
     end
   end
 
+  describe ".find_by_hashid" do
+    it "finds model by hashid" do
+      model = FakeModel.create!
+
+      result = FakeModel.find_by_hashid(model.hashid)
+
+      expect(result).to eq(model)
+    end
+
+    it "returns nil when unable to find model" do
+      result = FakeModel.find_by_hashid("ABC")
+
+      expect(result).to eq(nil)
+    end
+  end
+
+  describe ".find_by_hashid!" do
+    it "finds model by hashid" do
+      model = FakeModel.create!
+
+      result = FakeModel.find_by_hashid!(model.hashid)
+
+      expect(result).to eq(model)
+    end
+
+    it "returns nil when unable to find model" do
+      expect { FakeModel.find_by_hashid!("ABC") }
+        .to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+
   describe ".configure" do
     it "sets gem configuration with block" do
       config = Hashid::Rails.configuration

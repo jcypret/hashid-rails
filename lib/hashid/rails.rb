@@ -58,6 +58,14 @@ module Hashid
         end
       end
 
+      def find_by_hashid(hashid)
+        find_by(id: decode_id(hashid))
+      end
+
+      def find_by_hashid!(hashid)
+        find_by!(id: decode_id(hashid))
+      end
+
       private
 
       def hashids
