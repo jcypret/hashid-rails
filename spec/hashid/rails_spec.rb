@@ -28,6 +28,25 @@ describe Hashid::Rails do
     end
   end
 
+  describe "associations" do
+    it "accesses associations" do
+      post = Post.create!
+      comment = Comment.create!(post: post)
+
+      result = Post.find(post.id).comments.find(comment.id)
+
+      expect(result).to eq(comment)
+    end
+
+    it "can build associations" do
+      post = Post.create!
+
+      comment = post.comments.build
+
+      expect(comment.post_id).to eq(post.id)
+    end
+  end
+
   describe ".encode_id" do
     context "when single id" do
       it "returns hashid" do
