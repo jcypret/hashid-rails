@@ -8,6 +8,10 @@ module Hashid
     # Arbitrary value to verify hashid
     HASHID_TOKEN = 72 # "H".ord
 
+    def self.included(base)
+      base.extend ClassMethods
+    end
+
     # Get configuration or load defaults
     def self.configuration
       @configuration ||= Configuration.new
@@ -23,27 +27,12 @@ module Hashid
       @configuration = Configuration.new
     end
 
-    def self.included(base)
-      base.extend ClassMethods
-    end
-
     def hashid
       self.class.encode_id(id)
     end
     alias to_param hashid
 
     module ClassMethods
-      def hashids
-        secret = Hashid::Rails.configuration.secret
-        length = Hashid::Rails.configuration.length
-        alphabet = Hashid::Rails.configuration.alphabet
-
-        arguments = ["#{table_name}#{secret}", length]
-        arguments << alphabet if alphabet.present?
-
-        Hashids.new(*arguments)
-      end
-
       def encode_id(ids)
         if ids.is_a?(Array)
           ids.map { |id| hashid_encode(id) }
@@ -69,6 +58,17 @@ module Hashid
       end
 
       private
+
+      def hashids
+        secret = Hashid::Rails.configuration.secret
+        length = Hashid::Rails.configuration.length
+        alphabet = Hashid::Rails.configuration.alphabet
+
+        arguments = ["#{table_name}#{secret}", length]
+        arguments << alphabet if alphabet.present?
+
+        Hashids.new(*arguments)
+      end
 
       def model_reload?
         caller.any? { |s| s =~ %r{ active_record/persistence.*reload } }

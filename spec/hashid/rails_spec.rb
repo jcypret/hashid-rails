@@ -1,8 +1,7 @@
 require "spec_helper"
 
 describe Hashid::Rails do
-  subject(:model) { FakeModel.new(id: 100_117) }
-  let(:actual_id) { model.id }
+  before(:each) { Hashid::Rails.reset }
 
   describe "#hashid" do
     it "returns model ID encoded as hashid" do
@@ -131,106 +130,56 @@ describe Hashid::Rails do
       decoded_id = FakeModel.decode_id(100_117)
       expect(decoded_id).to eq(100_117)
     end
+
+    context "when find is disabled" do
+      it "does not decode id" do
+        model = FakeModel.create!
+
+        Hashid::Rails.configure do |config|
+          config.disable_find = false
+        end
+        result = FakeModel.find(model.hashid)
+
+        expect(result).to eq(model)
+
+        Hashid::Rails.configure do |config|
+          config.disable_find = true
+        end
+
+        expect { FakeModel.find(model.hashid) }
+          .to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
   end
 
   describe ".configure" do
-    after(:each) { Hashid::Rails.reset }
+    it "sets gem configuration with block" do
+      config = Hashid::Rails.configuration
 
-    describe "secret" do
-      it "defaults to empty string" do
-        expect(Hashid::Rails.configuration.secret).to eq("")
+      aggregate_failures "before config" do
+        expect(config.secret).to eq("")
+        expect(config.length).to eq(6)
+        expect(config.alphabet).to eq(nil)
+        expect(config.disable_find).to eq(false)
       end
 
-      it "updates config" do
-        Hashid::Rails.configure do |config|
-          config.secret = "mysecret"
-        end
-
-        expect(Hashid::Rails.configuration.secret).to eq("mysecret")
-      end
-    end
-
-    describe "length" do
-      it "defaults to empty string" do
-        expect(Hashid::Rails.configuration.length).to eq(6)
+      Hashid::Rails.configure do |configuration|
+        configuration.secret = "shhh"
+        configuration.length = 13
+        configuration.alphabet = "ABC"
+        configuration.disable_find = true
       end
 
-      it "updates config" do
-        Hashid::Rails.configure do |config|
-          config.length = 13
-        end
-
-        expect(Hashid::Rails.configuration.length).to eq 13
-      end
-    end
-
-    describe "alphabet" do
-      let(:expected_alphabet) { "ABCDEFGHIJKLMNOPQRSTUVWXYZ" }
-      let(:config) { Hashid::Rails.configuration }
-
-      it "defaults to nil" do
-        expect(Hashid::Rails.configuration.alphabet).to eq(nil)
-      end
-
-      it "updates config" do
-        alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-        Hashid::Rails.configure do |config|
-          config.alphabet = alphabet
-        end
-
-        expect(Hashid::Rails.configuration.alphabet).to eq(alphabet)
-      end
-    end
-
-    describe "disable_find" do
-      let(:expected_alphabet) { "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789" }
-      let(:config) { Hashid::Rails.configuration }
-
-      before :each do
-        Hashid::Rails.configure do |config|
-          config.alphabet = expected_alphabet
-          config.length = 6
-        end
-      end
-
-      context "unset" do
-        it "unhashes argument in find method" do
-          model = FakeModel.create!
-
-          result = FakeModel.find(model.hashid)
-
-          expect(result).to eq(model)
-        end
-      end
-
-      context "set to false" do
-        it "unhashes argument in find method" do
-          Hashid::Rails.configure do |config|
-            config.disable_find = false
-          end
-          model = FakeModel.create!
-
-          result = FakeModel.find(model.hashid)
-
-          expect(result).to eq(model)
-        end
-      end
-
-      context "set to true" do
-        it "does not unhash argument in find method" do
-          Hashid::Rails.configure do |config|
-            config.disable_find = true
-          end
-          model = FakeModel.create!
-
-          expect { FakeModel.find(model.hashid) }
-            .to raise_error(ActiveRecord::RecordNotFound)
-        end
+      aggregate_failures "after config" do
+        expect(config.secret).to eq("shhh")
+        expect(config.length).to eq(13)
+        expect(config.alphabet).to eq("ABC")
+        expect(config.disable_find).to eq(true)
       end
     end
   end
 
-  describe "#reset" do
+  describe ".reset" do
     it "resets the gem configuration to defaults" do
       Hashid::Rails.configure do |config|
         config.secret = "my secret"
@@ -243,4 +192,5 @@ describe Hashid::Rails do
       expect(Hashid::Rails.configuration.secret).to eql ""
     end
   end
+
 end
