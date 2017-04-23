@@ -51,7 +51,7 @@ module Hashid
       end
 
       def find(hashid)
-        if model_reload? || Hashid::Rails.configuration.disable_find
+        if Hashid::Rails.configuration.disable_find
           super(hashid)
         else
           super(decode_id(hashid) || hashid)
@@ -69,10 +69,6 @@ module Hashid
         arguments << alphabet if alphabet.present?
 
         Hashids.new(*arguments)
-      end
-
-      def model_reload?
-        caller.any? { |s| s =~ %r{ active_record/persistence.*reload } }
       end
 
       def hashid_encode(id)

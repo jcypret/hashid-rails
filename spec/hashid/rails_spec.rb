@@ -17,6 +17,17 @@ describe Hashid::Rails do
     end
   end
 
+  describe "#reload" do
+    it "reloads model" do
+      model = FakeModel.create!(name: "original")
+
+      model.name = "modified"
+
+      expect { model.reload }.to change(model, :name)
+        .from("modified").to("original")
+    end
+  end
+
   describe ".encode_id" do
     context "when single id" do
       it "returns hashid" do
@@ -148,6 +159,17 @@ describe Hashid::Rails do
 
         expect { FakeModel.find(model.hashid) }
           .to raise_error(ActiveRecord::RecordNotFound)
+      end
+
+      it "does not call decode_id" do
+        model = FakeModel.create!
+        Hashid::Rails.configure do |config|
+          config.disable_find = true
+        end
+
+        expect(FakeModel).not_to receive(:decode_id).with(model.id)
+
+        FakeModel.find(model.id)
       end
     end
   end
