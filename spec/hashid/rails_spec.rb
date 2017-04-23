@@ -6,7 +6,7 @@ describe Hashid::Rails do
   describe "#hashid" do
     it "returns model ID encoded as hashid" do
       model = FakeModel.new(id: 100_117)
-      expect(model.hashid).to eq("Qkmc18r3")
+      expect(model.hashid).to eq("JyiQGy5")
     end
   end
 
@@ -21,21 +21,21 @@ describe Hashid::Rails do
     context "when single id" do
       it "returns hashid" do
         encoded_id = FakeModel.encode_id(100_117)
-        expect(encoded_id).to eq("Qkmc18r3")
+        expect(encoded_id).to eq("JyiQGy5")
       end
     end
 
     context "when array with a single id" do
       it "returns an array with single hashid" do
         encoded_ids = FakeModel.encode_id([1])
-        expect(encoded_ids).to eq(["NZwmcg"])
+        expect(encoded_ids).to eq(["NPdiEN"])
       end
     end
 
     context "when array with many ids" do
       it "returns an array of hashids" do
         encoded_ids = FakeModel.encode_id([1, 2, 3])
-        expect(encoded_ids).to eq(["NZwmcg", "NEdycn", "e71MhR"])
+        expect(encoded_ids).to eq(["NPdiEN", "NwniBe", "zKwimz"])
       end
     end
   end
@@ -43,7 +43,7 @@ describe Hashid::Rails do
   describe ".decode_id" do
     context "when single param" do
       it "returns decoded hashid" do
-        decoded_id = FakeModel.decode_id("Qkmc18r3")
+        decoded_id = FakeModel.decode_id("JyiQGy5")
         expect(decoded_id).to eq(100_117)
       end
 
@@ -55,7 +55,7 @@ describe Hashid::Rails do
 
     context "when an array" do
       it "returns array with decoded hashid" do
-        decoded_ids = FakeModel.decode_id(["NZwmcg"])
+        decoded_ids = FakeModel.decode_id(["NPdiEN"])
         expect(decoded_ids).to eq([1])
       end
 
@@ -67,7 +67,7 @@ describe Hashid::Rails do
 
     context "when array with many hashid" do
       it "returns array of decoded hashids" do
-        decoded_ids = FakeModel.decode_id(["NZwmcg", "NEdycn", "e71MhR"])
+        decoded_ids = FakeModel.decode_id(["NPdiEN", "NwniBe", "zKwimz"])
         expect(decoded_ids).to eq([1, 2, 3])
       end
 

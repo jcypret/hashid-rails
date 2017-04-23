@@ -6,7 +6,8 @@ require "active_record"
 module Hashid
   module Rails
     # Arbitrary value to verify hashid
-    HASHID_TOKEN = 72 # "H".ord
+    # https://en.wikipedia.org/wiki/Phrases_from_The_Hitchhiker%27s_Guide_to_the_Galaxy#On_the_Internet_and_in_software
+    HASHID_TOKEN = 42
 
     def self.included(base)
       base.extend ClassMethods
