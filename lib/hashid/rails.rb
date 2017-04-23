@@ -54,7 +54,7 @@ module Hashid
         if Hashid::Rails.configuration.disable_find
           super(hashid)
         else
-          super(decode_id(hashid) || hashid)
+          super(decode_id(hashid))
         end
       end
 
