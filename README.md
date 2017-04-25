@@ -32,10 +32,37 @@ $ gem install hashid-rails
 
 ## Basic Usage
 
-Just use `Model#find` passing in the hashid instead of the model id.
+1. Include Hashid Rails in the ActiveRecord model you'd like to enable hashids.
+
+```ruby
+class Model < ActiveRecord::Base
+  include Hashid::Rails
+end
+```
+
+2. Continue using `Model#find` passing in either a hashid or regular 'ol id.
 
 ```ruby
 @person = Person.find(params[:hashid])
+```
+
+## Get hashid of model
+
+You can access the hashid of any model using the `hashid` method.
+
+```ruby
+model = Model.find(params[:hashid])
+model.hashid
+#=> "yLA6m0oM"
+```
+
+Additionally, the `to_param` method is overriden to use hashid instead of id.
+This means methods that take advantage of implicit ID will automatically work
+with hashids.
+
+```ruby
+<%= link_to "Model", model %>
+#=> <a href="/models/yLA6m0oM">Model</a>
 ```
 
 ## Alternative Usage
