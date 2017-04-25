@@ -60,7 +60,7 @@ Additionally, the `to_param` method is overriden to use hashid instead of id.
 This means methods that take advantage of implicit ID will automatically work
 with hashids.
 
-```ruby
+```erb
 <%= link_to "Model", model %>
 #=> <a href="/models/yLA6m0oM">Model</a>
 ```
