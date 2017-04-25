@@ -61,8 +61,11 @@ This means methods that take advantage of implicit ID will automatically work
 with hashids.
 
 ```erb
+Passing a hashid model to `link_to`…
 <%= link_to "Model", model %>
-#=> <a href="/models/yLA6m0oM">Model</a>
+
+will use `hashid` instead of `id`.
+<a href="/models/yLA6m0oM">Model</a>
 ```
 
 ## Alternative Usage
