@@ -52,11 +52,12 @@ module Hashid
 
       def find(*ids)
         expects_array = ids.first.is_a?(Array)
-        ids = ids.flatten.compact.uniq
-        ids = ids.first unless expects_array || ids.size > 1
+
+        uniq_ids = ids.flatten.compact.uniq
+        uniq_ids = uniq_ids.first unless expects_array || uniq_ids.size > 1
 
         if Hashid::Rails.configuration.override_find
-          super(decode_id(ids))
+          super(decode_id(uniq_ids))
         else
           super
         end
