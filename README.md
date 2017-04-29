@@ -52,6 +52,7 @@ You can access the hashid of any model using the `hashid` method.
 
 ```ruby
 model = Model.find(params[:hashid])
+#=> <Model>
 model.hashid
 #=> "yLA6m0oM"
 ```
