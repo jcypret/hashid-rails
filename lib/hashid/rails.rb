@@ -51,10 +51,10 @@ module Hashid
       end
 
       def find(hashid)
-        if Hashid::Rails.configuration.disable_find
-          super(hashid)
-        else
+        if Hashid::Rails.configuration.override_find
           super(decode_id(hashid))
+        else
+          super(hashid)
         end
       end
 

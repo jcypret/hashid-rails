@@ -166,14 +166,14 @@ describe Hashid::Rails do
         model = FakeModel.create!
 
         Hashid::Rails.configure do |config|
-          config.disable_find = false
+          config.override_find = true
         end
         result = FakeModel.find(model.hashid)
 
         expect(result).to eq(model)
 
         Hashid::Rails.configure do |config|
-          config.disable_find = true
+          config.override_find = false
         end
 
         expect { FakeModel.find(model.hashid) }
@@ -183,7 +183,7 @@ describe Hashid::Rails do
       it "does not call decode_id" do
         model = FakeModel.create!
         Hashid::Rails.configure do |config|
-          config.disable_find = true
+          config.override_find = false
         end
 
         expect(FakeModel).not_to receive(:decode_id).with(model.id)
@@ -229,24 +229,25 @@ describe Hashid::Rails do
       config = Hashid::Rails.configuration
 
       aggregate_failures "before config" do
-        expect(config.secret).to eq("")
-        expect(config.length).to eq(6)
-        expect(config.alphabet).to eq(nil)
-        expect(config.disable_find).to eq(false)
+        expect(config.salt).to eq("")
+        expect(config.min_hash_length).to eq(6)
+        expect(config.alphabet).to eq(
+          "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890")
+        expect(config.override_find).to eq(true)
       end
 
       Hashid::Rails.configure do |configuration|
-        configuration.secret = "shhh"
-        configuration.length = 13
+        configuration.salt = "shhh"
+        configuration.min_hash_length = 13
         configuration.alphabet = "ABC"
-        configuration.disable_find = true
+        configuration.override_find = false
       end
 
       aggregate_failures "after config" do
-        expect(config.secret).to eq("shhh")
-        expect(config.length).to eq(13)
+        expect(config.salt).to eq("shhh")
+        expect(config.min_hash_length).to eq(13)
         expect(config.alphabet).to eq("ABC")
-        expect(config.disable_find).to eq(true)
+        expect(config.override_find).to eq(false)
       end
     end
   end
@@ -254,14 +255,14 @@ describe Hashid::Rails do
   describe ".reset" do
     it "resets the gem configuration to defaults" do
       Hashid::Rails.configure do |config|
-        config.secret = "my secret"
+        config.salt = "my secret"
       end
 
-      expect(Hashid::Rails.configuration.secret).to eql "my secret"
+      expect(Hashid::Rails.configuration.salt).to eq "my secret"
 
       Hashid::Rails.reset
 
-      expect(Hashid::Rails.configuration.secret).to eql ""
+      expect(Hashid::Rails.configuration.salt).to eq ""
     end
   end
 end

@@ -1,19 +1,19 @@
 module Hashid
   module Rails
     class Configuration
-      attr_accessor :secret, :length, :alphabet, :disable_find
+      attr_accessor :salt, :min_hash_length, :alphabet, :override_find
 
       def initialize
-        @secret = ""
-        @length = 6
-        @alphabet = nil
-        @disable_find = false
+        @salt = ""
+        @min_hash_length = 6
+        @alphabet = "abcdefghijklmnopqrstuvwxyz" \
+                    "ABCDEFGHIJKLMNOPQRSTUVWXYZ" \
+                    "1234567890"
+        @override_find = true
       end
 
       def for_table(table_name)
-        arguments = ["#{table_name}#{secret}", length]
-        arguments << alphabet if alphabet.present?
-        arguments
+        ["#{table_name}#{salt}", min_hash_length, alphabet]
       end
     end
   end
