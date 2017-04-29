@@ -54,7 +54,7 @@ module Hashid
         if Hashid::Rails.configuration.override_find
           super(decode_id(hashid))
         else
-          super(hashid)
+          super
         end
       end
 
