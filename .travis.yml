@@ -1,7 +1,9 @@
 language: ruby
 cache: bundler
 rvm:
-  - 2.2.5
-  - 2.3.1
-env:
-  CODECLIMATE_REPO_TOKEN: 37aee70bb2e818f3bf4d2af88ea4a4355393901ba98b3876c244d42ed20fdbe1
+  - 2.3
+addons:
+  code_climate:
+    repo_token: 37aee70bb2e818f3bf4d2af88ea4a4355393901ba98b3876c244d42ed20fdbe1
+after_success:
+  - bundle exec codeclimate-test-reporter
