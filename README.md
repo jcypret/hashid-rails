@@ -76,10 +76,16 @@ back on the standard `find` method.
 
 ```ruby
 # When a record is found, it returns the record.
-@person = Person.find_by_hashid!(params[:hashid])
+@person = Person.find_by_hashid(params[:hashid])
+#=> <Person>
 
-# When no record, is found it raises an exception.
-ActiveRecord::RecordNotFound
+# When no record, it returns nil
+@person = Person.find_by_hashid(params[:hashid])
+#=> nil
+
+# A bang (!) version is also available and raises an exception when not found.
+@person = Person.find_by_hashid!(params[:hashid])
+#=> ActiveRecord::RecordNotFound
 ```
 
 ## Configuration (optional)
