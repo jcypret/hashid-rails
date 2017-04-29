@@ -69,14 +69,7 @@ module Hashid
       private
 
       def hashids
-        secret = Hashid::Rails.configuration.secret
-        length = Hashid::Rails.configuration.length
-        alphabet = Hashid::Rails.configuration.alphabet
-
-        arguments = ["#{table_name}#{secret}", length]
-        arguments << alphabet if alphabet.present?
-
-        Hashids.new(*arguments)
+        Hashids.new(*Hashid::Rails.configuration.for_table(table_name))
       end
 
       def hashid_encode(id)

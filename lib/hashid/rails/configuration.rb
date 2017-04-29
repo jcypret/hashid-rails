@@ -9,6 +9,12 @@ module Hashid
         @alphabet = nil
         @disable_find = false
       end
+
+      def for_table(table_name)
+        arguments = ["#{table_name}#{secret}", length]
+        arguments << alphabet if alphabet.present?
+        arguments
+      end
     end
   end
 end
