@@ -5,6 +5,14 @@ require "active_record"
 
 module Hashid
   module Rails
+    # Arbitrary value to verify hashid
+    # https://en.wikipedia.org/wiki/Phrases_from_The_Hitchhiker%27s_Guide_to_the_Galaxy#On_the_Internet_and_in_software
+    HASHID_TOKEN = 42
+
+    def self.included(base)
+      base.extend ClassMethods
+    end
+
     # Get configuration or load defaults
     def self.configuration
       @configuration ||= Configuration.new
@@ -20,20 +28,46 @@ module Hashid
       @configuration = Configuration.new
     end
 
-    def self.included(base)
-      base.extend ClassMethods
-    end
-
-    def encoded_id
+    def hashid
       self.class.encode_id(id)
     end
-
-    def to_param
-      encoded_id
-    end
-    alias hashid to_param
+    alias to_param hashid
 
     module ClassMethods
+      def encode_id(ids)
+        if ids.is_a?(Array)
+          ids.map { |id| hashid_encode(id) }
+        else
+          hashid_encode(ids)
+        end
+      end
+
+      def decode_id(ids)
+        if ids.is_a?(Array)
+          ids.map { |id| hashid_decode(id) }
+        else
+          hashid_decode(ids)
+        end
+      end
+
+      def find(hashid)
+        if Hashid::Rails.configuration.disable_find
+          super(hashid)
+        else
+          super(decode_id(hashid))
+        end
+      end
+
+      def find_by_hashid(hashid)
+        find_by(id: decode_id(hashid))
+      end
+
+      def find_by_hashid!(hashid)
+        find_by!(id: decode_id(hashid))
+      end
+
+      private
+
       def hashids
         secret = Hashid::Rails.configuration.secret
         length = Hashid::Rails.configuration.length
@@ -45,47 +79,18 @@ module Hashid
         Hashids.new(*arguments)
       end
 
-      def encode_id(ids)
-        if ids.is_a?(Array)
-          ids.map { |id| hashid_encode(id) }
-        else
-          hashid_encode(ids)
-        end
-      end
-
-      def decode_id(ids)
-        if ids.is_a?(Array)
-          decoded_ids = ids.map { |id| hashid_decode(id) }
-          decoded_ids.any? ? decoded_ids : nil
-        else
-          hashid_decode(ids)
-        end
-      end
-
-      def find(hashid)
-        if model_reload? || Hashid::Rails.configuration.disable_find
-          super(hashid)
-        else
-          super(decode_id(hashid) || hashid)
-        end
-      end
-
-      def find_by_hashid(hashid)
-        find_by!(id: hashid_decode(hashid))
-      end
-
-      private
-
-      def model_reload?
-        caller.any? { |s| s =~ %r{ active_record/persistence.*reload } }
+      def hashid_encode(id)
+        hashids.encode(HASHID_TOKEN, id)
       end
 
       def hashid_decode(id)
-        hashids.decode(id.to_s).first
+        decoded_hashid = hashids.decode(id.to_s)
+        return id unless valid_hashid?(decoded_hashid)
+        decoded_hashid.last
       end
 
-      def hashid_encode(id)
-        hashids.encode(id)
+      def valid_hashid?(decoded_hashid)
+        decoded_hashid.size == 2 && decoded_hashid.first == HASHID_TOKEN
       end
     end
   end
