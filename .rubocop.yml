@@ -4,7 +4,7 @@ Style/IndentArray:
   EnforcedStyle: consistent
 Style/Documentation:
   Enabled: false
-Style/BlockLength:
+Metrics/BlockLength:
   Exclude:
   - "*.gemspec"
   - "spec/**/*.rb"
