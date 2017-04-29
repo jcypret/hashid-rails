@@ -50,9 +50,13 @@ module Hashid
         end
       end
 
-      def find(hashid)
+      def find(*ids)
+        expects_array = ids.first.is_a?(Array)
+        ids = ids.flatten.compact.uniq
+        ids = ids.first unless expects_array || ids.size > 1
+
         if Hashid::Rails.configuration.override_find
-          super(decode_id(hashid))
+          super(decode_id(ids))
         else
           super
         end

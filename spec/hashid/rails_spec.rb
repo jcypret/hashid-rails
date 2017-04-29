@@ -127,8 +127,55 @@ describe Hashid::Rails do
       end
     end
 
-    context "when finding multiple models" do
-      it "returns correct models by hashids" do
+    context "when single id as array" do
+      it "returns array with correct model by hashid" do
+        model = FakeModel.create!
+
+        result = FakeModel.find([model.hashid])
+
+        expect(result).to eq([model])
+      end
+
+      it "returns array with correct model by id" do
+        model = FakeModel.create!
+
+        result = FakeModel.find([model.id])
+
+        expect(result).to eq([model])
+      end
+    end
+
+    context "when multiple ids as args" do
+      it "returns array of correct models by hashids" do
+        model1 = FakeModel.create!
+        model2 = FakeModel.create!
+
+        result = FakeModel.find(model1.hashid, model2.hashid)
+
+        expect(result).to eq([model1, model2])
+      end
+
+      it "returns array of correct models by ids" do
+        model1 = FakeModel.create!
+        model2 = FakeModel.create!
+
+        result = FakeModel.find(model1.id, model2.id)
+
+        expect(result).to eq([model1, model2])
+      end
+
+      it "returns array of correct models by mix of hashids and ids" do
+        model1 = FakeModel.create!
+        model2 = FakeModel.create!
+
+        result = FakeModel.find(model1.hashid, model2.id)
+
+        expect(result).to eq([model1, model2])
+      end
+    end
+
+    context "when multiple ids as an array" do
+      it "returns array of correct models by hashids" do
         model1 = FakeModel.create!
         model2 = FakeModel.create!
 
@@ -137,7 +184,7 @@ describe Hashid::Rails do
         expect(result).to eq([model1, model2])
       end
 
-      it "returns correct models by ids" do
+      it "returns array of correct models by ids" do
         model1 = FakeModel.create!
         model2 = FakeModel.create!
 
@@ -146,7 +193,7 @@ describe Hashid::Rails do
         expect(result).to eq([model1, model2])
       end
 
-      it "returns correct models by mix of hashids and ids" do
+      it "returns array of correct models by mix of hashids and ids" do
         model1 = FakeModel.create!
         model2 = FakeModel.create!
 
