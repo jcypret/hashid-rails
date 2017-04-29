@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.0 (2017-04-29)
+- Sign hashids to prevent accidentally decoded regular ids
+- Require explicitly including Hashid::Rails in models
+- Improve support for model associations
+- Rename config variables to better match hashids project
+- Improve overall test coverage
+
 ## 0.7.0 (2017-02-15)
 - Add configuration option to disable overriding default `find` (#22).
 
