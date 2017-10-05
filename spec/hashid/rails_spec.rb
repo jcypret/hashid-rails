@@ -68,6 +68,17 @@ describe Hashid::Rails do
         expect(encoded_ids).to eq(%w[NPdiEN NwniBe zKwimz])
       end
     end
+
+    context "when hashid signing disabled" do
+      before do
+        Hashid::Rails.configure { |config| config.sign_hashids = false }
+      end
+
+      it "returns unsigned hashid" do
+        encoded_id = FakeModel.encode_id(100_117)
+        expect(encoded_id).to eq("z3m059")
+      end
+    end
   end
 
   describe ".decode_id" do
@@ -104,6 +115,17 @@ describe Hashid::Rails do
       it "returns array of already decoded ids" do
         decoded_ids = FakeModel.decode_id([1, 2, 3])
         expect(decoded_ids).to eq([1, 2, 3])
+      end
+    end
+
+    context "when hashid signing disabled" do
+      before do
+        Hashid::Rails.configure { |config| config.sign_hashids = false }
+      end
+
+      it "returns decoded unsigned hashid" do
+        decoded_id = FakeModel.decode_id("z3m059")
+        expect(decoded_id).to eq(100_117)
       end
     end
   end
@@ -281,6 +303,7 @@ describe Hashid::Rails do
         expect(config.alphabet).to eq(
           "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890")
         expect(config.override_find).to eq(true)
+        expect(config.sign_hashids).to eq(true)
       end
 
       Hashid::Rails.configure do |configuration|
@@ -288,6 +311,7 @@ describe Hashid::Rails do
         configuration.min_hash_length = 13
         configuration.alphabet = "ABC"
         configuration.override_find = false
+        configuration.sign_hashids = false
       end
 
       aggregate_failures "after config" do
@@ -295,6 +319,7 @@ describe Hashid::Rails do
         expect(config.min_hash_length).to eq(13)
         expect(config.alphabet).to eq("ABC")
         expect(config.override_find).to eq(false)
+        expect(config.sign_hashids).to eq(false)
       end
     end
   end

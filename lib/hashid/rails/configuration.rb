@@ -1,7 +1,11 @@
 module Hashid
   module Rails
     class Configuration
-      attr_accessor :salt, :min_hash_length, :alphabet, :override_find
+      attr_accessor :salt,
+                    :min_hash_length,
+                    :alphabet,
+                    :override_find,
+                    :sign_hashids
 
       def initialize
         @salt = ""
@@ -10,6 +14,7 @@ module Hashid
                     "ABCDEFGHIJKLMNOPQRSTUVWXYZ" \
                     "1234567890"
         @override_find = true
+        @sign_hashids = true
       end
 
       def for_table(table_name)

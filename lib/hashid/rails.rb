@@ -78,13 +78,20 @@ module Hashid
       end
 
       def hashid_encode(id)
-        hashids.encode(HASHID_TOKEN, id)
+        if Hashid::Rails.configuration.sign_hashids
+          hashids.encode(HASHID_TOKEN, id)
+        else
+          hashids.encode(id)
+        end
       end
 
       def hashid_decode(id)
         decoded_hashid = hashids.decode(id.to_s)
-        return id unless valid_hashid?(decoded_hashid)
-        decoded_hashid.last
+        if Hashid::Rails.configuration.sign_hashids
+          valid_hashid?(decoded_hashid) ? decoded_hashid.last : id
+        else
+          decoded_hashid.first
+        end
       end
 
       def valid_hashid?(decoded_hashid)
