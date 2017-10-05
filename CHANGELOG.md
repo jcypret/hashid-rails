@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.0 (2017-10-04)
+- Add option to disable hashid signing. This adds backwards compatibility with
+  pre-1.0 releases. Thanks @olliebennett!
+- Add note to README about upgrading from pre-1.0 releases.
+
 ## 1.0.0 (2017-04-29)
 - Sign hashids to prevent accidentally decoded regular ids
 - Require explicitly including Hashid::Rails in models
