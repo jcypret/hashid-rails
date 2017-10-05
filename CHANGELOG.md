@@ -2,7 +2,7 @@
 
 ## 1.1.0 (2017-10-04)
 - Add option to disable hashid signing. This adds backwards compatibility with
-  pre-1.0 releases. Thanks @olliebennett!
+  pre-1.0 releases. Thanks [@olliebennett](https://github.com/olliebennett)! ([#37](https://github.com/jcypret/hashid-rails/pull/37))
 - Add note to README about upgrading from pre-1.0 releases.
 
 ## 1.0.0 (2017-04-29)
