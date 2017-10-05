@@ -11,7 +11,7 @@ will instead have unique short hashes like "yLA6m0oM", "5bAyD0LO", and
 be added or removed at any time.
 
 > IMPORTANT: If you need to maintain the same hashids from a pre-1.0 release,
-> read the [upgrade notes](#upgrading-from-pre-1.0).
+> read the [upgrade notes](#upgrading-from-pre-10).
 
 ## Installation
 
@@ -123,13 +123,13 @@ end
 
 The 1.0 release of this gem introduced hashid signing to prevent
 conflicts with database IDs that could be mis-interpreted as hashids.
-IDs are signed when encoding and the signature verified when decoding.
-The trade off is that hashids are now different than in previous versions due to the added signature.
+IDs are now signed when encoding and the signature verified when decoding.
+The trade off is that hashids are different than in previous versions due to the added signature.
 If you need to maintain the same hashids from a pre-1.0 version, set `sign_hashids` to false in the config.
 
 Additionally, some of the config names have been modified to better match the parent [Hashid](https://github.com/peterhellberg/hashids.rb) project.
 The config `secret` has been renamed to `salt` and the `length` renamed to `min_hash_length`.
-Update the initializer accordingly.
+Update the initializer config accordingly.
 
 Lastly, `Hashid::Rails` is no longer imported into `ActiveRecord::Base` by default.
 You can instead include `Hashid::Rails` selectively in the desired models,
