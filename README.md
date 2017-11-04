@@ -18,7 +18,7 @@ be added or removed at any time.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'hashid-rails'
+gem 'hashid-rails', '~> 1.0'
 ```
 
 And then execute:
@@ -30,7 +30,7 @@ $ bundle
 Or install it yourself as:
 
 ```shell
-$ gem install hashid-rails
+$ gem install hashid-rails -v 1.0
 ```
 
 ## Basic Usage
