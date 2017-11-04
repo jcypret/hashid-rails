@@ -45,6 +45,24 @@ describe Hashid::Rails do
 
       expect(comment.post_id).to eq(post.id)
     end
+
+    it "works with eager loading" do
+      post = Post.create!
+      Comment.create!(post: post)
+
+      result = Post.includes(:comments).find(post.hashid)
+
+      expect(result).to eq(post)
+    end
+
+    it "finds association through parent" do
+      post = Post.create!
+      comment = Comment.create!(post: post)
+
+      result = Post.find(post.hashid).comments.find(comment.hashid)
+
+      expect(result).to eq(comment)
+    end
   end
 
   describe ".encode_id" do
