@@ -34,6 +34,16 @@ module Hashid
     alias to_param hashid
 
     module ClassMethods
+      def relation
+        super.tap { |r| r.extend ClassMethods }
+      end
+
+      def has_many(*args, &block)
+        options = args.extract_options!
+        options[:extend] = Array(options[:extend]).push(ClassMethods)
+        super(*args, options, &block)
+      end
+
       def encode_id(ids)
         if ids.is_a?(Array)
           ids.map { |id| hashid_encode(id) }
