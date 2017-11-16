@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.1.1 (2017-11-03)
+- Fix eager loading and finding records through a parent. ([#39](https://github.com/jcypret/hashid-rails/pull/39))
+
 ## 1.1.0 (2017-10-04)
 - Add option to disable hashid signing. This adds backwards compatibility with
   pre-1.0 releases. Thanks [@olliebennett](https://github.com/olliebennett)! ([#37](https://github.com/jcypret/hashid-rails/pull/37))
