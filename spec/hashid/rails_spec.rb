@@ -106,8 +106,13 @@ describe Hashid::Rails do
         expect(decoded_id).to eq(100_117)
       end
 
-      it "returns already decoded id" do
-        decoded_id = FakeModel.decode_id(100_117)
+      it "returns nil when already decoded id" do
+        decoded_id = FakeModel.decode_id(100_117, fallback: false)
+        expect(decoded_id).to eq(nil)
+      end
+
+      it "returns already decoded id when fallback" do
+        decoded_id = FakeModel.decode_id(100_117, fallback: true)
         expect(decoded_id).to eq(100_117)
       end
     end
@@ -118,8 +123,13 @@ describe Hashid::Rails do
         expect(decoded_ids).to eq([1])
       end
 
-      it "returns array with already decoded id" do
-        decoded_ids = FakeModel.decode_id([1])
+      it "returns array with nil when already decoded id" do
+        decoded_ids = FakeModel.decode_id([1], fallback: false)
+        expect(decoded_ids).to eq([nil])
+      end
+
+      it "returns array with already decoded id when fallback" do
+        decoded_ids = FakeModel.decode_id([1], fallback: true)
         expect(decoded_ids).to eq([1])
       end
     end
@@ -130,8 +140,13 @@ describe Hashid::Rails do
         expect(decoded_ids).to eq([1, 2, 3])
       end
 
-      it "returns array of already decoded ids" do
-        decoded_ids = FakeModel.decode_id([1, 2, 3])
+      it "returns array of nil when already decoded ids" do
+        decoded_ids = FakeModel.decode_id([1, 2, 3], fallback: false)
+        expect(decoded_ids).to eq([nil, nil, nil])
+      end
+
+      it "returns array of already decoded ids when fallback" do
+        decoded_ids = FakeModel.decode_id([1, 2, 3], fallback: true)
         expect(decoded_ids).to eq([1, 2, 3])
       end
     end
@@ -244,7 +259,12 @@ describe Hashid::Rails do
     end
 
     it "does not try and decode regular ids" do
-      decoded_id = FakeModel.decode_id(100_117)
+      decoded_id = FakeModel.decode_id(100_117, fallback: false)
+      expect(decoded_id).to eq(nil)
+    end
+
+    it "does not try and decode regular ids when fallback" do
+      decoded_id = FakeModel.decode_id(100_117, fallback: true)
       expect(decoded_id).to eq(100_117)
     end
 
@@ -294,6 +314,14 @@ describe Hashid::Rails do
 
       expect(result).to eq(nil)
     end
+
+    it "returns nil for non-hashid" do
+      model = FakeModel.create!
+
+      result = FakeModel.find_by_hashid(model.id)
+
+      expect(result).to eq(nil)
+    end
   end
 
   describe ".find_by_hashid!" do
@@ -305,8 +333,15 @@ describe Hashid::Rails do
       expect(result).to eq(model)
     end
 
-    it "returns nil when unable to find model" do
+    it "raises record not found when unable to find model" do
       expect { FakeModel.find_by_hashid!("ABC") }
+        .to raise_error(ActiveRecord::RecordNotFound)
+    end
+
+    it "raises record not found for non-hashid" do
+      model = FakeModel.create!
+
+      expect { FakeModel.find_by_hashid!(model.id) }
         .to raise_error(ActiveRecord::RecordNotFound)
     end
   end

@@ -52,11 +52,14 @@ module Hashid
         end
       end
 
-      def decode_id(ids)
+      # @param ids [String, Integer, Array<Integer, String>] id(s) to decode.
+      # @param fallback [Boolean] indicates whether to return the passed in
+      #   id(s) if unable to decode or if already decoded.
+      def decode_id(ids, fallback: false)
         if ids.is_a?(Array)
-          ids.map { |id| hashid_decode(id) }
+          ids.map { |id| hashid_decode(id, fallback: fallback) }
         else
-          hashid_decode(ids)
+          hashid_decode(ids, fallback: fallback)
         end
       end
 
@@ -67,18 +70,18 @@ module Hashid
         uniq_ids = uniq_ids.first unless expects_array || uniq_ids.size > 1
 
         if Hashid::Rails.configuration.override_find
-          super(decode_id(uniq_ids))
+          super(decode_id(uniq_ids, fallback: true))
         else
           super
         end
       end
 
       def find_by_hashid(hashid)
-        find_by(id: decode_id(hashid))
+        find_by(id: decode_id(hashid, fallback: false))
       end
 
       def find_by_hashid!(hashid)
-        find_by!(id: decode_id(hashid))
+        find_by!(id: decode_id(hashid, fallback: false))
       end
 
       private
@@ -95,10 +98,12 @@ module Hashid
         end
       end
 
-      def hashid_decode(id)
+      def hashid_decode(id, fallback:)
         decoded_hashid = hashids.decode(id.to_s)
+        fallback_value = fallback ? id : nil
+
         if Hashid::Rails.configuration.sign_hashids
-          valid_hashid?(decoded_hashid) ? decoded_hashid.last : id
+          valid_hashid?(decoded_hashid) ? decoded_hashid.last : fallback_value
         else
           decoded_hashid.first
         end
