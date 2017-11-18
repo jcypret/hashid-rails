@@ -100,10 +100,10 @@ module Hashid
 
       def hashid_decode(id, fallback:)
         decoded_hashid = hashids.decode(id.to_s)
-        fallback = fallback ? id : nil
+        fallback_value = fallback ? id : nil
 
         if Hashid::Rails.configuration.sign_hashids
-          valid_hashid?(decoded_hashid) ? decoded_hashid.last : fallback
+          valid_hashid?(decoded_hashid) ? decoded_hashid.last : fallback_value
         else
           decoded_hashid.first
         end
