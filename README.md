@@ -18,7 +18,7 @@ be added or removed at any time.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'hashid-rails', '~> 1.0'
+gem "hashid-rails", "~> 1.0"
 ```
 
 And then execute:
