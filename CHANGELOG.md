@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.0 (2017-11-17)
+- Fix regression where `find_by_hashid` and `find_by_hashid!` attempt to decode
+  values that are not hashids. ([#41](https://github.com/jcypret/hashid-rails/pull/41))
+
 ## 1.1.1 (2017-11-03)
 - Fix eager loading and finding records through a parent. ([#39](https://github.com/jcypret/hashid-rails/pull/39))
 
