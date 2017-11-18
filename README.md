@@ -27,12 +27,6 @@ And then execute:
 $ bundle
 ```
 
-Or install it yourself as:
-
-```shell
-$ gem install hashid-rails -v 1.0
-```
-
 ## Basic Usage
 
 1. Include Hashid Rails in the ActiveRecord model you'd like to enable hashids.
