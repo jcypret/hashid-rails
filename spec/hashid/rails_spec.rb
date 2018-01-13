@@ -258,16 +258,6 @@ describe Hashid::Rails do
       end
     end
 
-    it "does not try and decode regular ids" do
-      decoded_id = FakeModel.decode_id(100_117, fallback: false)
-      expect(decoded_id).to eq(nil)
-    end
-
-    it "does not try and decode regular ids when fallback" do
-      decoded_id = FakeModel.decode_id(100_117, fallback: true)
-      expect(decoded_id).to eq(100_117)
-    end
-
     context "when find is disabled" do
       it "does not decode id" do
         model = FakeModel.create!
