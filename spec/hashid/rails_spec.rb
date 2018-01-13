@@ -163,190 +163,193 @@ describe Hashid::Rails do
     end
   end
 
-  shared_examples_for "find" do
-    context "when finding single model" do
-      it "returns correct model by hashid" do
-        model = FakeModel.create!
+  shared_examples_for "finders" do
+    describe ".find" do
+      context "when finding single model" do
+        it "returns correct model by hashid" do
+          model = FakeModel.create!
 
-        result = FakeModel.find(model.hashid)
+          result = FakeModel.find(model.hashid)
 
-        expect(result).to eq(model)
-      end
-
-      it "returns correct model by id" do
-        model = FakeModel.create!
-
-        result = FakeModel.find(model.id)
-
-        expect(result).to eq(model)
-      end
-    end
-
-    context "when single id as array" do
-      it "returns array with correct model by hashid" do
-        model = FakeModel.create!
-
-        result = FakeModel.find([model.hashid])
-
-        expect(result).to eq([model])
-      end
-
-      it "returns array with correct model by id" do
-        model = FakeModel.create!
-
-        result = FakeModel.find([model.id])
-
-        expect(result).to eq([model])
-      end
-    end
-
-    context "when multiple ids as args" do
-      it "returns array of correct models by hashids" do
-        model1 = FakeModel.create!
-        model2 = FakeModel.create!
-
-        result = FakeModel.find(model1.hashid, model2.hashid)
-
-        expect(result).to eq([model1, model2])
-      end
-
-      it "returns array of correct models by ids" do
-        model1 = FakeModel.create!
-        model2 = FakeModel.create!
-
-        result = FakeModel.find(model1.id, model2.id)
-
-        expect(result).to eq([model1, model2])
-      end
-
-      it "returns array of correct models by mix of hashids and ids" do
-        model1 = FakeModel.create!
-        model2 = FakeModel.create!
-
-        result = FakeModel.find(model1.hashid, model2.id)
-
-        expect(result).to eq([model1, model2])
-      end
-    end
-
-    context "when multiple ids as an array" do
-      it "returns array of correct models by hashids" do
-        model1 = FakeModel.create!
-        model2 = FakeModel.create!
-
-        result = FakeModel.find([model1.hashid, model2.hashid])
-
-        expect(result).to eq([model1, model2])
-      end
-
-      it "returns array of correct models by ids" do
-        model1 = FakeModel.create!
-        model2 = FakeModel.create!
-
-        result = FakeModel.find([model1.id, model2.id])
-
-        expect(result).to eq([model1, model2])
-      end
-
-      it "returns array of correct models by mix of hashids and ids" do
-        model1 = FakeModel.create!
-        model2 = FakeModel.create!
-
-        result = FakeModel.find([model1.hashid, model2.id])
-
-        expect(result).to eq([model1, model2])
-      end
-    end
-
-    context "when find is disabled" do
-      it "does not decode id" do
-        model = FakeModel.create!
-
-        Hashid::Rails.configure do |config|
-          config.override_find = true
-        end
-        result = FakeModel.find(model.hashid)
-
-        expect(result).to eq(model)
-
-        Hashid::Rails.configure do |config|
-          config.override_find = false
+          expect(result).to eq(model)
         end
 
-        expect { FakeModel.find(model.hashid) }
+        it "returns correct model by id" do
+          model = FakeModel.create!
+
+          result = FakeModel.find(model.id)
+
+          expect(result).to eq(model)
+        end
+      end
+
+      context "when single id as array" do
+        it "returns array with correct model by hashid" do
+          model = FakeModel.create!
+
+          result = FakeModel.find([model.hashid])
+
+          expect(result).to eq([model])
+        end
+
+        it "returns array with correct model by id" do
+          model = FakeModel.create!
+
+          result = FakeModel.find([model.id])
+
+          expect(result).to eq([model])
+        end
+      end
+
+      context "when multiple ids as args" do
+        it "returns array of correct models by hashids" do
+          model1 = FakeModel.create!
+          model2 = FakeModel.create!
+
+          result = FakeModel.find(model1.hashid, model2.hashid)
+
+          expect(result).to eq([model1, model2])
+        end
+
+        it "returns array of correct models by ids" do
+          model1 = FakeModel.create!
+          model2 = FakeModel.create!
+
+          result = FakeModel.find(model1.id, model2.id)
+
+          expect(result).to eq([model1, model2])
+        end
+
+        it "returns array of correct models by mix of hashids and ids" do
+          model1 = FakeModel.create!
+          model2 = FakeModel.create!
+
+          result = FakeModel.find(model1.hashid, model2.id)
+
+          expect(result).to eq([model1, model2])
+        end
+      end
+
+      context "when multiple ids as an array" do
+        it "returns array of correct models by hashids" do
+          model1 = FakeModel.create!
+          model2 = FakeModel.create!
+
+          result = FakeModel.find([model1.hashid, model2.hashid])
+
+          expect(result).to eq([model1, model2])
+        end
+
+        it "returns array of correct models by ids" do
+          model1 = FakeModel.create!
+          model2 = FakeModel.create!
+
+          result = FakeModel.find([model1.id, model2.id])
+
+          expect(result).to eq([model1, model2])
+        end
+
+        it "returns array of correct models by mix of hashids and ids" do
+          model1 = FakeModel.create!
+          model2 = FakeModel.create!
+
+          result = FakeModel.find([model1.hashid, model2.id])
+
+          expect(result).to eq([model1, model2])
+        end
+      end
+
+      context "when find is disabled" do
+        it "does not decode id" do
+          model = FakeModel.create!
+
+          Hashid::Rails.configure do |config|
+            config.override_find = true
+          end
+          result = FakeModel.find(model.hashid)
+
+          expect(result).to eq(model)
+
+          Hashid::Rails.configure do |config|
+            config.override_find = false
+          end
+
+          expect { FakeModel.find(model.hashid) }
+            .to raise_error(ActiveRecord::RecordNotFound)
+        end
+
+        it "does not call decode_id" do
+          model = FakeModel.create!
+          Hashid::Rails.configure do |config|
+            config.override_find = false
+          end
+
+          expect(FakeModel).not_to receive(:decode_id).with(model.id)
+
+          FakeModel.find(model.id)
+        end
+      end
+    end
+
+    describe ".find_by_hashid" do
+      it "finds model by hashid" do
+        model = FakeModel.create!
+
+        result = FakeModel.find_by_hashid(model.hashid)
+
+        expect(result).to eq(model)
+      end
+
+      it "returns nil when unable to find model" do
+        result = FakeModel.find_by_hashid("ABC")
+
+        expect(result).to eq(nil)
+      end
+
+      it "returns nil for non-hashid" do
+        model = FakeModel.create!
+
+        result = FakeModel.find_by_hashid(model.id)
+
+        expect(result).to eq(nil)
+      end
+    end
+
+    describe ".find_by_hashid!" do
+      it "finds model by hashid" do
+        model = FakeModel.create!
+
+        result = FakeModel.find_by_hashid!(model.hashid)
+
+        expect(result).to eq(model)
+      end
+
+      it "raises record not found when unable to find model" do
+        expect { FakeModel.find_by_hashid!("ABC") }
           .to raise_error(ActiveRecord::RecordNotFound)
       end
 
-      it "does not call decode_id" do
+      it "raises record not found for non-hashid" do
         model = FakeModel.create!
-        Hashid::Rails.configure do |config|
-          config.override_find = false
-        end
 
-        expect(FakeModel).not_to receive(:decode_id).with(model.id)
-
-        FakeModel.find(model.id)
+        expect { FakeModel.find_by_hashid!(model.id) }
+          .to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end
 
-  describe ".find" do
-    it_behaves_like("find")
+  describe "finders" do
+    context "when signed hashids" do
+      before { Hashid::Rails.configuration.sign_hashids = true }
+      it_behaves_like("finders")
+    end
 
-    context "when hashid signing is disabled" do
-      before do
-        Hashid::Rails.configure { |config| config.sign_hashids = false }
-      end
-
-      it_behaves_like("find")
+    context "when unsigned hashids" do
+      before { Hashid::Rails.configuration.sign_hashids = false }
+      it_behaves_like("finders")
     end
   end
 
-  describe ".find_by_hashid" do
-    it "finds model by hashid" do
-      model = FakeModel.create!
-
-      result = FakeModel.find_by_hashid(model.hashid)
-
-      expect(result).to eq(model)
-    end
-
-    it "returns nil when unable to find model" do
-      result = FakeModel.find_by_hashid("ABC")
-
-      expect(result).to eq(nil)
-    end
-
-    it "returns nil for non-hashid" do
-      model = FakeModel.create!
-
-      result = FakeModel.find_by_hashid(model.id)
-
-      expect(result).to eq(nil)
-    end
-  end
-
-  describe ".find_by_hashid!" do
-    it "finds model by hashid" do
-      model = FakeModel.create!
-
-      result = FakeModel.find_by_hashid!(model.hashid)
-
-      expect(result).to eq(model)
-    end
-
-    it "raises record not found when unable to find model" do
-      expect { FakeModel.find_by_hashid!("ABC") }
-        .to raise_error(ActiveRecord::RecordNotFound)
-    end
-
-    it "raises record not found for non-hashid" do
-      model = FakeModel.create!
-
-      expect { FakeModel.find_by_hashid!(model.id) }
-        .to raise_error(ActiveRecord::RecordNotFound)
-    end
-  end
 
   describe ".configure" do
     it "sets gem configuration with block" do
