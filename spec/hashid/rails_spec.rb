@@ -350,7 +350,6 @@ describe Hashid::Rails do
     end
   end
 
-
   describe ".configure" do
     it "sets gem configuration with block" do
       config = Hashid::Rails.configuration
@@ -359,7 +358,8 @@ describe Hashid::Rails do
         expect(config.salt).to eq("")
         expect(config.min_hash_length).to eq(6)
         expect(config.alphabet).to eq(
-          "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890")
+          "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+        )
         expect(config.override_find).to eq(true)
         expect(config.sign_hashids).to eq(true)
       end
