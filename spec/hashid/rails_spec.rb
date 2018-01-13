@@ -288,6 +288,38 @@ describe Hashid::Rails do
         FakeModel.find(model.id)
       end
     end
+
+    context "when hashid signing is disabled" do
+      before do
+        Hashid::Rails.configure { |config| config.sign_hashids = false }
+      end
+
+      it "finds by hashid" do
+        model = FakeModel.create!
+
+        result = FakeModel.find(model.hashid)
+
+        expect(result).to eq(model)
+      end
+
+      it "finds by id" do
+        model = FakeModel.create!
+
+        result = FakeModel.find(model.id)
+
+        expect(result).to eq(model)
+      end
+
+      it "raises record not found when unknown hashid" do
+        expect { FakeModel.find("ABC") }
+          .to raise_error(ActiveRecord::RecordNotFound)
+      end
+
+      it "raises record not found when unknown id" do
+        expect { FakeModel.find(123) }
+          .to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
   end
 
   describe ".find_by_hashid" do
