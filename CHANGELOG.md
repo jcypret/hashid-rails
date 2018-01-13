@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.1 (2018-01-13)
+- Found issue where unsigned hashids with `find` did not fall back to passed in ID ([#46](https://github.com/jcypret/hashid-rails/pull/46)).
+- Move finder specs to a shared example run against both the signed and unsigned hashids.
+
 ## 1.2.0 (2017-11-17)
 - Fix regression where `find_by_hashid` and `find_by_hashid!` attempt to decode
   values that are not hashids. ([#41](https://github.com/jcypret/hashid-rails/pull/41))
