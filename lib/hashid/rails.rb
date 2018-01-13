@@ -105,7 +105,7 @@ module Hashid
         if Hashid::Rails.configuration.sign_hashids
           valid_hashid?(decoded_hashid) ? decoded_hashid.last : fallback_value
         else
-          decoded_hashid.first
+          decoded_hashid.first || fallback_value
         end
       end
 
