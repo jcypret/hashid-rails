@@ -84,10 +84,13 @@ module Hashid
         find_by!(id: decode_id(hashid, fallback: false))
       end
 
+      def hashid_table_name
+        table_name
+      end  
       private
 
       def hashids
-        Hashids.new(*Hashid::Rails.configuration.for_table(table_name))
+        Hashids.new(*Hashid::Rails.configuration.for_table(hashid_table_name))
       end
 
       def hashid_encode(id)
