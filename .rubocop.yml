@@ -6,6 +6,9 @@ Metrics/BlockLength:
   Exclude:
   - "*.gemspec"
   - "spec/**/*.rb"
+Naming/PredicateName:
+  NameWhitelist:
+    - has_many
 Style/Documentation:
   Enabled: false
 Style/StringLiterals:
