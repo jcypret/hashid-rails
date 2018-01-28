@@ -1,10 +1,15 @@
-Style/StringLiterals:
-  EnforcedStyle: double_quotes
-Style/IndentArray:
+AllCops:
+  TargetRubyVersion: 2.3
+Layout/IndentArray:
   EnforcedStyle: consistent
-Style/Documentation:
-  Enabled: false
 Metrics/BlockLength:
   Exclude:
   - "*.gemspec"
   - "spec/**/*.rb"
+Naming/PredicateName:
+  NameWhitelist:
+    - has_many
+Style/Documentation:
+  Enabled: false
+Style/StringLiterals:
+  EnforcedStyle: double_quotes

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "hashid/rails/version"
 require "hashid/rails/configuration"
 require "hashids"
@@ -38,7 +40,7 @@ module Hashid
         super.tap { |r| r.extend ClassMethods }
       end
 
-      def has_many(*args, &block) # rubocop:disable Style/PredicateName
+      def has_many(*args, &block)
         options = args.extract_options!
         options[:extend] = Array(options[:extend]).push(ClassMethods)
         super(*args, options, &block)
