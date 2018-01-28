@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "hashid/rails/version"
 require "hashid/rails/configuration"
 require "hashids"
