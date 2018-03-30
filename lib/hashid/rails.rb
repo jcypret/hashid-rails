@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require "hashid/rails/version"
 require "hashid/rails/configuration"
+require "hashid/rails/decoder"
 require "hashids"
 require "active_record"
 
