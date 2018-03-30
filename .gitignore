@@ -8,3 +8,5 @@
 /spec/reports/
 /tmp/
 /.ruby-version
+/.idea
+/.tm_properties

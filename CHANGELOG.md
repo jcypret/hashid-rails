@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.2.2 (2018-03-30)
+- Added ability to decode hashids within Rails inbound parameter hashes.
+
 ## 1.2.1 (2018-01-13)
 - Found issue where unsigned hashids with `find` did not fall back to passed in ID ([#46](https://github.com/jcypret/hashid-rails/pull/46)).
 - Move finder specs to a shared example run against both the signed and unsigned hashids.
