@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.2.2 (2018-07-29)
+### Fixed
+- Handle exception raised when using a letter-only alphabet and attempting to
+  decode an integer ID from [@Drakula2k](https://github.com/Drakula2k) ([#54](https://github.com/jcypret/hashid-rails/pull/54)).
+
 ## 1.2.1 (2018-01-13)
 - Found issue where unsigned hashids with `find` did not fall back to passed in ID ([#46](https://github.com/jcypret/hashid-rails/pull/46)).
 - Move finder specs to a shared example run against both the signed and unsigned hashids.
