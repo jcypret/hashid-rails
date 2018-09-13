@@ -5,3 +5,8 @@ class Post < ActiveRecord::Base
 
   has_many :comments
 end
+
+class OtherPost < ActiveRecord::Base
+  self.table_name = "posts"
+  has_many :comments, foreign_key: "post_id"
+end

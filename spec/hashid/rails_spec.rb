@@ -65,6 +65,15 @@ describe Hashid::Rails do
 
       expect(result).to eq(comment)
     end
+
+    it "finds association through non-hashid parent" do
+      post = OtherPost.create!
+      comment = post.comments.create!
+
+      result = post.comments.find(comment.hashid)
+
+      expect(result).to eq(comment)
+    end
   end
 
   describe ".encode_id" do
