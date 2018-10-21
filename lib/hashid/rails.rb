@@ -83,7 +83,7 @@ module Hashid
       end
 
       def find_by_hashid!(hashid)
-        find_by!(id: decode_id(hashid, fallback: false))
+        find_by!(id: decode_id(hashid, fallback: true))
       end
 
       private
