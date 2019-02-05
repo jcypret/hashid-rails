@@ -93,8 +93,8 @@ module Hashid
       end
 
       def hashid_encode(id)
-        if Hashid::Rails.configuration.sign_hashids
-          hashids.encode(HASHID_TOKEN, id)
+        if (sig = Hashid::Rails.configuration.sign_hashids)
+          hashids.encode(signature(sig), id)
         else
           hashids.encode(id)
         end
@@ -114,7 +114,11 @@ module Hashid
       end
 
       def valid_hashid?(decoded_hashid)
-        decoded_hashid.size == 2 && decoded_hashid.first == HASHID_TOKEN
+        decoded_hashid.size == 2 && decoded_hashid.first == signature
+      end
+
+      def signature(sig = Hashid::Rails.configuration.sign_hashids)
+        sig.is_a?(Symbol) && respond_to?(sig) ? send(sig) : HASHID_TOKEN
       end
     end
   end
