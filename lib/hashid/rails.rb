@@ -94,9 +94,9 @@ module Hashid
 
       def hashid_encode(id)
         if Hashid::Rails.configuration.sign_hashids
-          hashids.encode(HASHID_TOKEN, id)
+          find_hashid_prefix + hashids.encode(HASHID_TOKEN, id)
         else
-          hashids.encode(id)
+          find_hashid_prefix + hashids.encode(id)
         end
       end
 
@@ -114,15 +114,19 @@ module Hashid
       end
 
       def id_to_string(id)
-        return id.to_s unless Hashid::Rails.use_prefix
+        safe_id = id.to_s
+        return safe_id unless Hashid::Rails.configuration.use_prefix
+        return safe_id unless safe_id.start_with?(find_hashid_prefix)
 
-        id.to_s.gsub(/^#{hashid_prefix}/, "")
+        safe_id[find_hashid_prefix.length..safe_id.length]
       end
 
-      def hashid_prefix
-        return "" unless Hashid::Rails.use_prefix
-
-        "#{hashid_prefix}#{Hashid::Rails.hashid_prefix_separator}"
+      def find_hashid_prefix
+        if Hashid::Rails.configuration.use_prefix && respond_to?(:hashid_prefix)
+          "#{hashid_prefix}#{Hashid::Rails.configuration.hashid_prefix_separator}"
+        else
+          ""
+        end
       end
 
       def valid_hashid?(decoded_hashid)
