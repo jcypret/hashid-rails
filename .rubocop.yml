@@ -1,11 +1,11 @@
 AllCops:
   TargetRubyVersion: 2.3
-Layout/IndentArray:
+Layout/IndentFirstArrayElement:
   EnforcedStyle: consistent
 Metrics/BlockLength:
   Exclude:
-  - "*.gemspec"
-  - "spec/**/*.rb"
+    - "*.gemspec"
+    - "spec/**/*.rb"
 Naming/PredicateName:
   NameWhitelist:
     - has_many

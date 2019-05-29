@@ -17,6 +17,8 @@ module Hashid
                     "1234567890"
         @override_find = true
         @sign_hashids = true
+        @use_prefix = true
+        @hashid_prefix_separator = "!"
       end
 
       def for_table(table_name)
