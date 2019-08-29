@@ -35,6 +35,11 @@ describe Hashid::Rails do
         expect(model.to_param).to eq(model.id.to_s)
       end
     end
+
+    it "is nil when the model id is nil" do
+      model = FakeModel.new
+      expect(model.hashid).to be_nil
+    end
   end
 
   describe "#reload" do
@@ -86,6 +91,13 @@ describe Hashid::Rails do
   end
 
   describe ".encode_id" do
+    context "when nil" do
+      it "returns nil" do
+        encoded_id = FakeModel.encode_id(nil)
+        expect(encoded_id).to be_nil
+      end
+    end
+
     context "when single id" do
       it "returns hashid" do
         encoded_id = FakeModel.encode_id(100_117)
