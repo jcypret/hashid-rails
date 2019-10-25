@@ -163,6 +163,22 @@ describe Hashid::Rails do
         expect(decoded_id).to eq(100_117)
       end
     end
+
+    context "with letters-only alphabet" do
+      before do
+        Hashid::Rails.configure { |config| config.alphabet = [*"A".."Z"].join }
+      end
+
+      it "returns nil when already decoded id" do
+        decoded_id = FakeModel.decode_id(100_117, fallback: false)
+        expect(decoded_id).to eq(nil)
+      end
+
+      it "returns already decoded id when fallback" do
+        decoded_id = FakeModel.decode_id(100_117, fallback: true)
+        expect(decoded_id).to eq(100_117)
+      end
+    end
   end
 
   shared_examples_for "finders" do

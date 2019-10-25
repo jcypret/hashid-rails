@@ -1,7 +1,12 @@
 # Changelog
 
-## 1.2.2 (2018-03-30)
+
+## 1.2.3 (2019-10-25)
 - Added ability to decode hashids within Rails inbound parameter hashes.
+
+## 1.2.2 (2018-07-29)
+- Handle exception raised when using a letter-only alphabet and attempting to
+  decode an integer ID from [@Drakula2k](https://github.com/Drakula2k) ([#54](https://github.com/jcypret/hashid-rails/pull/54)).
 
 ## 1.2.1 (2018-01-13)
 - Found issue where unsigned hashids with `find` did not fall back to passed in ID ([#46](https://github.com/jcypret/hashid-rails/pull/46)).

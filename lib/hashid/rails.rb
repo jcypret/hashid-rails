@@ -101,14 +101,16 @@ module Hashid
       end
 
       def hashid_decode(id, fallback:)
-        decoded_hashid = hashids.decode(id.to_s)
         fallback_value = fallback ? id : nil
+        decoded_hashid = hashids.decode(id.to_s)
 
         if Hashid::Rails.configuration.sign_hashids
           valid_hashid?(decoded_hashid) ? decoded_hashid.last : fallback_value
         else
           decoded_hashid.first || fallback_value
         end
+      rescue Hashids::InputError
+        fallback_value
       end
 
       def valid_hashid?(decoded_hashid)

@@ -1,6 +1,6 @@
 # Hashid Rails
 [![Gem Version](https://badge.fury.io/rb/hashid-rails.svg)](https://badge.fury.io/rb/hashid-rails)
-[![Build Status](https://travis-ci.org/jcypret/hashid-rails.svg?branch=master)](https://travis-ci.org/jcypret/hashid-rails)
+[![Build Status](https://travis-ci.com/jcypret/hashid-rails.svg?branch=master)](https://travis-ci.org/jcypret/hashid-rails)
 [![Code Climate](https://codeclimate.com/github/jcypret/hashid-rails/badges/gpa.svg)](https://codeclimate.com/github/jcypret/hashid-rails)
 [![Test Coverage](https://codeclimate.com/github/jcypret/hashid-rails/badges/coverage.svg)](https://codeclimate.com/github/jcypret/hashid-rails/coverage)
 
@@ -147,3 +147,6 @@ and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create a new Pull Request
+
+> NOTE: If it's a significant feature or change, consider creating an Issue for
+> discussion before opening a PR.
