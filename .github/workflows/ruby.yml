@@ -1,6 +1,6 @@
 name: build
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   build:
@@ -17,8 +17,19 @@ jobs:
     - name: Install SQLite
       run: sudo apt install -y libsqlite3-dev
 
+    - name: Setup Code Climate test-reporter
+      run: |
+        curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+        chmod +x ./cc-test-reporter
+        ./cc-test-reporter before-build
+
     - name: Build and test with RSpec
       run: |
         gem install bundler
         bundle install --jobs 4 --retry 3
         bundle exec rspec
+
+    - name: Publish code coverage
+      run: |
+        export GIT_BRANCH="${GITHUB_REF/refs\/heads\//}"
+        ./cc-test-reporter after-build -r ${{secrets.CC_TEST_REPORTER_ID}}
