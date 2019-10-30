@@ -36,6 +36,23 @@ module Hashid
     alias to_param hashid
 
     module ClassMethods
+      def hashid_config(options = {})
+        config = Hashid::Rails.configuration.dup
+        config.pepper = table_name
+        options.each do |attr, value|
+          config.public_send("#{attr}=", value)
+        end
+        @hashid_configuration = config
+      end
+
+      def hashid_configuration
+        @hashid_configuration || hashid_config
+      end
+
+      def reset_hashid_config
+        @hashid_configuration = nil
+      end
+
       def relation
         super.tap { |r| r.extend ClassMethods }
       end
@@ -71,7 +88,7 @@ module Hashid
         uniq_ids = ids.flatten.compact.uniq
         uniq_ids = uniq_ids.first unless expects_array || uniq_ids.size > 1
 
-        if Hashid::Rails.configuration.override_find
+        if hashid_configuration.override_find
           super(decode_id(uniq_ids, fallback: true))
         else
           super
@@ -89,11 +106,11 @@ module Hashid
       private
 
       def hashids
-        Hashids.new(*Hashid::Rails.configuration.for_table(table_name))
+        Hashids.new(*hashid_configuration.to_args)
       end
 
       def hashid_encode(id)
-        if Hashid::Rails.configuration.sign_hashids
+        if hashid_configuration.sign_hashids
           hashids.encode(HASHID_TOKEN, id)
         else
           hashids.encode(id)
@@ -104,7 +121,7 @@ module Hashid
         fallback_value = fallback ? id : nil
         decoded_hashid = hashids.decode(id.to_s)
 
-        if Hashid::Rails.configuration.sign_hashids
+        if hashid_configuration.sign_hashids
           valid_hashid?(decoded_hashid) ? decoded_hashid.last : fallback_value
         else
           decoded_hashid.first || fallback_value
