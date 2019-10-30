@@ -54,7 +54,7 @@ model.hashid
 #=> "yLA6m0oM"
 ```
 
-Additionally, the `to_param` method is overriden to use hashid instead of id.
+Additionally, the `to_param` method is overridden to use hashid instead of id.
 This means methods that take advantage of implicit ID will automatically work
 with hashids.
 
@@ -94,8 +94,9 @@ default options.
 
 ```ruby
 Hashid::Rails.configure do |config|
-  # The salt to use for generating hashid. Prepended with table name.
+  # The salt to use for generating hashid. Prepended with pepper (table name).
   config.salt = ""
+  config.pepper = table_name
 
   # The minimum length of generated hashids
   config.min_hash_length = 6
@@ -110,6 +111,22 @@ Hashid::Rails.configure do |config|
 
   # Whether to sign hashids to prevent conflicts with regular IDs (see https://github.com/jcypret/hashid-rails/issues/30)
   config.sign_hashids = true
+end
+```
+
+### Model-Level Config
+
+You can also customize the hashid configuration at the model level.
+`hashid_config` supports all the same options as the `Hashid::Rails.configure`
+block and allows for each model to have a different config. This can be useful
+for setting a custom salt/pepper. For instance, the pepper defaults to the table
+name, so if you rename the table, you can keep the same hashids by setting the
+pepper to the old table name.
+
+```ruby
+class Model < ActiveRecord::Base
+  include Hashid::Rails
+  hashid_config pepper: "old_table_name"
 end
 ```
 
