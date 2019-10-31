@@ -3,7 +3,12 @@
 require "spec_helper"
 
 describe Hashid::Rails do
-  before(:each) { Hashid::Rails.reset }
+  before(:each) do
+    Hashid::Rails.reset
+    FakeModel.reset_hashid_config
+    Post.reset_hashid_config
+    Comment.reset_hashid_config
+  end
 
   describe "#hashid" do
     it "returns model ID encoded as hashid" do
@@ -296,13 +301,15 @@ describe Hashid::Rails do
           Hashid::Rails.configure do |config|
             config.override_find = true
           end
-          result = FakeModel.find(model.hashid)
+          FakeModel.reset_hashid_config
 
+          result = FakeModel.find(model.hashid)
           expect(result).to eq(model)
 
           Hashid::Rails.configure do |config|
             config.override_find = false
           end
+          FakeModel.reset_hashid_config
 
           expect { FakeModel.find(model.hashid) }
             .to raise_error(ActiveRecord::RecordNotFound)
@@ -409,6 +416,65 @@ describe Hashid::Rails do
         expect(config.override_find).to eq(false)
         expect(config.sign_hashids).to eq(false)
       end
+    end
+
+    it "inherits default configuration" do
+      config = FakeModel.hashid_configuration
+
+      aggregate_failures "default config" do
+        expect(config.salt).to eq("")
+        expect(config.pepper).to eq(FakeModel.table_name)
+        expect(config.min_hash_length).to eq(6)
+        expect(config.alphabet).to eq(
+          "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+        )
+        expect(config.override_find).to eq(true)
+        expect(config.sign_hashids).to eq(true)
+      end
+    end
+
+    it "supports model-specific config" do
+      FakeModel.hashid_config(
+        salt: "shhh",
+        pepper: "achoo",
+        min_hash_length: 7,
+        alphabet: "XYZ",
+        override_find: false,
+        sign_hashids: false
+      )
+
+      # model-level has new config
+      config = FakeModel.hashid_configuration
+      aggregate_failures "model-level config" do
+        expect(config.salt).to eq("shhh")
+        expect(config.pepper).to eq("achoo")
+        expect(config.min_hash_length).to eq(7)
+        expect(config.alphabet).to eq("XYZ")
+        expect(config.override_find).to eq(false)
+        expect(config.sign_hashids).to eq(false)
+      end
+
+      # default config does not change
+      config = Hashid::Rails.configuration
+      aggregate_failures "default config" do
+        expect(config.salt).to eq("")
+        expect(config.pepper).to eq("")
+        expect(config.min_hash_length).to eq(6)
+        expect(config.alphabet).to eq(
+          "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+        )
+        expect(config.override_find).to eq(true)
+        expect(config.sign_hashids).to eq(true)
+      end
+    end
+
+    it "supports different configs for each model" do
+      Post.hashid_config(pepper: "achoo")
+      Comment.hashid_config(pepper: "gazoontite")
+
+      expect(FakeModel.hashid_configuration.pepper).to eq(FakeModel.table_name)
+      expect(Post.hashid_configuration.pepper).to eq("achoo")
+      expect(Comment.hashid_configuration.pepper).to eq("gazoontite")
     end
   end
 

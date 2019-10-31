@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.3.0 (2019-10-29)
+- Add support for model-level config ([#67](https://github.com/jcypret/hashid-rails/pull/67))
+
 ## 1.2.2 (2018-07-29)
 ### Fixed
 - Handle exception raised when using a letter-only alphabet and attempting to
