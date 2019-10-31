@@ -38,12 +38,7 @@ describe Hashid::Rails do
 
     it "is nil when the model id is nil" do
       model = FakeModel.new
-      expect(model.hashid).to be_nil
-    end
-
-    it "is nil when the model id is nil" do
-      model = FakeModel.new
-      expect(model.hashid).to be_nil
+      expect(model.to_param).to be_nil
     end
   end
 
