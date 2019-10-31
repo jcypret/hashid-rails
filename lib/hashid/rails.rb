@@ -113,6 +113,8 @@ module Hashid
       end
 
       def hashid_encode(id)
+        return nil if id.nil?
+
         if hashid_configuration.sign_hashids
           hashids.encode(HASHID_TOKEN, id)
         else
