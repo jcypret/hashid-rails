@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.4.0 (2019-10-30)
+- Add support for disabling the overriding of `to_param` ([#68](https://github.com/jcypret/hashid-rails/pull/68))
+- Fix exception raised when calling `hashid` on an model with a `nil` id
+  ([#63](https://github.com/jcypret/hashid-rails/pull/63) by [fauxparse](https://github.com/fauxparse))
+
 ## 1.3.0 (2019-10-29)
 - Add support for model-level config ([#67](https://github.com/jcypret/hashid-rails/pull/67))
 
