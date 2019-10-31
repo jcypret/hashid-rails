@@ -20,7 +20,20 @@ describe Hashid::Rails do
   describe "#to_param" do
     it "aliases #hashid" do
       model = FakeModel.new(id: 100_117)
-      expect(model.hashid).to eq(model.to_param)
+      expect(model.to_param).to eq(model.hashid)
+    end
+
+    context "when override_to_param is false" do
+      before do
+        Hashid::Rails.configure do |config|
+          config.override_to_param = false
+        end
+      end
+
+      it "does not override to_param" do
+        model = FakeModel.new(id: 100_117)
+        expect(model.to_param).to eq(model.id.to_s)
+      end
     end
   end
 

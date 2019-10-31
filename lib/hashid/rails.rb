@@ -33,7 +33,10 @@ module Hashid
     def hashid
       self.class.encode_id(id)
     end
-    alias to_param hashid
+
+    def to_param
+      self.class.hashid_configuration.override_to_param ? hashid : super
+    end
 
     module ClassMethods
       def hashid_config(options = {})

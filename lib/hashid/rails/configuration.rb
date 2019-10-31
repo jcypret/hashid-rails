@@ -8,6 +8,7 @@ module Hashid
                     :min_hash_length,
                     :alphabet,
                     :override_find,
+                    :override_to_param,
                     :sign_hashids
 
       def initialize
@@ -18,6 +19,7 @@ module Hashid
                     "ABCDEFGHIJKLMNOPQRSTUVWXYZ" \
                     "1234567890"
         @override_find = true
+        @override_to_param = true
         @sign_hashids = true
       end
 
