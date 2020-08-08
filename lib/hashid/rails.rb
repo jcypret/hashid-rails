@@ -63,7 +63,7 @@ module Hashid
       def has_many(*args, &block)
         options = args.extract_options!
         options[:extend] = Array(options[:extend]).push(ClassMethods)
-        super(*args, options, &block)
+        super(*args, **options, &block)
       end
 
       def encode_id(ids)
