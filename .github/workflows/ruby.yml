@@ -17,19 +17,17 @@ jobs:
     - name: Install SQLite
       run: sudo apt install -y libsqlite3-dev
 
-    - name: Setup Code Climate test-reporter
-      run: |
-        curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-        chmod +x ./cc-test-reporter
-        ./cc-test-reporter before-build
-
-    - name: Build and test with RSpec
+    - name: Install Ruby dependencies
       run: |
         gem install bundler
         bundle install --jobs 4 --retry 3
-        bundle exec rspec
 
-    - name: Publish code coverage
-      run: |
-        export GIT_BRANCH="${GITHUB_REF/refs\/heads\//}"
-        ./cc-test-reporter after-build -r ${{secrets.CC_TEST_REPORTER_ID}}
+    - name: Test with RSpec
+      run: bundle exec rspec
+
+    - name: Publish Test Coverage
+      uses: paambaati/codeclimate-action@v2.6.0
+      env:
+        CC_TEST_REPORTER_ID: 37aee70bb2e818f3bf4d2af88ea4a4355393901ba98b3876c244d42ed20fdbe1
+      with:
+        coverageCommand: true
