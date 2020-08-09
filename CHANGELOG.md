@@ -1,9 +1,14 @@
 # Changelog
 
+## 1.4.1 (Unreleased)
+
+- Use codeclimate-action to improve edge-case handling ([#73](https://github.com/jcypret/hashid-rails/pull/73))
+- Use ** splat operator to address deprecation warning in Ruby 2.7 ([#72](https://github.com/jcypret/hashid-rails/pull/72)) by [alexford](https://github.com/alexford)
+
 ## 1.4.0 (2019-10-30)
 - Add support for disabling the overriding of `to_param` ([#68](https://github.com/jcypret/hashid-rails/pull/68))
 - Fix exception raised when calling `hashid` on an model with a `nil` id
-  ([#63](https://github.com/jcypret/hashid-rails/pull/63) by [fauxparse](https://github.com/fauxparse))
+  ([#63](https://github.com/jcypret/hashid-rails/pull/63)) by [fauxparse](https://github.com/fauxparse)
 
 ## 1.3.0 (2019-10-29)
 - Add support for model-level config ([#67](https://github.com/jcypret/hashid-rails/pull/67))
