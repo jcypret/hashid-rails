@@ -4,11 +4,15 @@ on: [push, pull_request]
 
 jobs:
   build:
-    name: Ruby ${{ matrix.ruby }}
+    name: Ruby ${{ matrix.ruby }} on Rails ${{ matrix.rails }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ruby: ["2.5", "2.6", "2.7"]
+        ruby: ["2.5", "2.6"]
+        rails: ["4.2", "5.0", "5.1", "5.2", "6.0"]
+        include:
+          - ruby: "2.7"
+            rails: "6.0"
 
     steps:
     - uses: actions/checkout@v2
@@ -25,17 +29,19 @@ jobs:
       uses: actions/cache@v2
       with:
         path: vendor/bundle
-        key: ruby-${{ matrix.ruby }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+        key: ruby-${{ matrix.ruby }}-rails-${{ matrix.rails }}-gems-${{ hashFiles('hashid-rails.gemspec', 'Appraisals') }}
         restore-keys: |
-          ruby-${{ matrix.ruby }}-gems-
+          ruby-${{ matrix.ruby }}-rails-${{ matrix.rails }}-gems-
 
     - name: Install Ruby dependencies
       run: |
-        bundle config path vendor/bundle
-        bundle install --jobs 4 --retry 3
+        bundle config set path ../vendor/bundle
+        bundle install --gemfile gemfiles/rails_${{ matrix.rails }}.gemfile --jobs 4 --retry 3
 
     - name: Test with RSpec
-      run: bundle exec rspec
+      env:
+        BUNDLE_GEMFILE: gemfiles/rails_${{ matrix.rails }}.gemfile
+      run: bundle exec appraisal rails-${{ matrix.rails }} rspec
 
     - name: Publish Test Coverage
       uses: paambaati/codeclimate-action@v2.6.0
