@@ -1,9 +1,10 @@
 # Changelog
 
-## 1.4.1 (Unreleased)
+## 1.4.1 (2020-08-09)
 
-- Use codeclimate-action to improve edge-case handling ([#73](https://github.com/jcypret/hashid-rails/pull/73))
 - Use ** splat operator to address deprecation warning in Ruby 2.7 ([#72](https://github.com/jcypret/hashid-rails/pull/72)) by [alexford](https://github.com/alexford)
+- Use codeclimate-action to improve edge-case handling ([#73](https://github.com/jcypret/hashid-rails/pull/73))
+- Add matrix testing for supported Ruby ([#74](https://github.com/jcypret/hashid-rails/pull/74)) and Rails ([#75](https://github.com/jcypret/hashid-rails/pull/75)) versions.
 
 ## 1.4.0 (2019-10-30)
 - Add support for disabling the overriding of `to_param` ([#68](https://github.com/jcypret/hashid-rails/pull/68))
