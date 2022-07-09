@@ -13,7 +13,7 @@ module Hashid
 
       def initialize
         @salt = ""
-        @pepper = ""
+        @pepper = ->(klass) { klass.table_name }
         @min_hash_length = 6
         @alphabet = "abcdefghijklmnopqrstuvwxyz" \
                     "ABCDEFGHIJKLMNOPQRSTUVWXYZ" \

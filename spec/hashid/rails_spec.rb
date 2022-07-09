@@ -471,7 +471,7 @@ describe Hashid::Rails do
       config = Hashid::Rails.configuration
       aggregate_failures "default config" do
         expect(config.salt).to eq("")
-        expect(config.pepper).to eq("")
+        expect(config.pepper).to a_kind_of(Proc)
         expect(config.min_hash_length).to eq(6)
         expect(config.alphabet).to eq(
           "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"

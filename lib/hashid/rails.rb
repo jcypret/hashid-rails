@@ -41,10 +41,15 @@ module Hashid
     module ClassMethods
       def hashid_config(options = {})
         config = Hashid::Rails.configuration.dup
-        config.pepper = table_name
+
         options.each do |attr, value|
           config.public_send("#{attr}=", value)
         end
+
+        if config.pepper.respond_to?(:call)
+          config.pepper = config.pepper.call(self)
+        end
+
         @hashid_configuration = config
       end
 
