@@ -96,7 +96,7 @@ default options.
 Hashid::Rails.configure do |config|
   # The salt to use for generating hashid. Prepended with pepper (table name).
   config.salt = ""
-  config.pepper = table_name
+  config.pepper = ->(klass) { klass.table_name }
 
   # The minimum length of generated hashids
   config.min_hash_length = 6
